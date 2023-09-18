@@ -4,8 +4,8 @@ import { createServer } from 'http';
 import * as passport from 'passport';
 import config from './db.config';
 import * as mongoose from 'mongoose';
-import { setRoutes } from './rest/setRoutes';
 import * as path from 'path';
+import { mainRouter } from './rest/routes/mainRouter';
 
 (async () => {
   const app = express();
@@ -24,7 +24,7 @@ import * as path from 'path';
   app.use(express.json());
   app.use(cors());
 
-  setRoutes(app);
+  app.use('/api', mainRouter);
 
   const root = path.join(process.cwd(), 'dist');
   app.use(express.static(root));

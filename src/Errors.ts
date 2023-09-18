@@ -8,7 +8,7 @@ enum ErrorCode {
   ERR_INVALID_PASSWORD = 'ERR_INVALID_PASSWORD',
   ERR_AUTH = 'ERR_AUTH',
   ERR_DATA_BASE_ERROR = 'ERR_DATA_BASE_ERROR',
-  ERR_INVALID_NICKNAME = 'ERR_INVALID_NICKNAME',
+  ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR',
 }
 
 export type ServerError = Error & {
@@ -24,20 +24,20 @@ export class DataBaseError implements ServerErrorJson {
   error: ServerError;
 
   constructor(message: string | Error) {
-    Object.assign(this.error, message instanceof Error ? message : new Error(message));
+    this.error = (message instanceof Error ? message : new Error(message)) as ServerError;
     this.error.extensions = {
       code: ErrorCode.ERR_DATA_BASE_ERROR,
     };
   }
 }
 
-export class InvalidNickNameError implements ServerErrorJson {
+export class ValidationError implements ServerErrorJson {
   error: ServerError;
 
   constructor(message: string | Error) {
-    Object.assign(this.error, message instanceof Error ? message : new Error(message));
+    this.error = (message instanceof Error ? message : new Error(message)) as ServerError;
     this.error.extensions = {
-      code: ErrorCode.ERR_INVALID_NICKNAME,
+      code: ErrorCode.ERR_VALIDATION_ERROR,
     };
   }
 }
@@ -46,7 +46,7 @@ export class AuthError implements ServerErrorJson {
   error: ServerError;
 
   constructor(message: string | Error) {
-    Object.assign(this.error, message instanceof Error ? message : new Error(message));
+    this.error = (message instanceof Error ? message : new Error(message)) as ServerError;
     this.error.extensions = {
       code: ErrorCode.ERR_AUTH,
     };
@@ -57,7 +57,7 @@ export class IncorrectEmailOrPasswordError implements ServerErrorJson {
   error: ServerError;
 
   constructor(message: string | Error) {
-    Object.assign(this.error, message instanceof Error ? message : new Error(message));
+    this.error = (message instanceof Error ? message : new Error(message)) as ServerError;
     this.error.extensions = {
       code: ErrorCode.ERR_INCORRECT_EMAIL_OR_PASSWORD,
     };
@@ -68,7 +68,7 @@ export class IncorrectPasswordError implements ServerErrorJson {
   error: ServerError;
 
   constructor(message: string | Error) {
-    Object.assign(this.error, message instanceof Error ? message : new Error(message));
+    this.error = (message instanceof Error ? message : new Error(message)) as ServerError;
     this.error.extensions = {
       code: ErrorCode.ERR_INCORRECT_PASSWORD,
     };
@@ -79,7 +79,7 @@ export class AccountAlreadyExistError implements ServerErrorJson {
   error: ServerError;
 
   constructor(message: string | Error) {
-    Object.assign(this.error, message instanceof Error ? message : new Error(message));
+    this.error = (message instanceof Error ? message : new Error(message)) as ServerError;
     this.error.extensions = {
       code: ErrorCode.ERR_ACCOUNT_ALREADY_EXIST,
     };
@@ -90,7 +90,7 @@ export class InvalidPasswordError implements ServerErrorJson {
   error: ServerError;
 
   constructor(message: string | Error) {
-    Object.assign(this.error, message instanceof Error ? message : new Error(message));
+    this.error = (message instanceof Error ? message : new Error(message)) as ServerError;
     this.error.extensions = {
       code: ErrorCode.ERR_INVALID_PASSWORD,
     };
@@ -101,7 +101,7 @@ export class NotFoundError implements ServerErrorJson {
   error: ServerError;
 
   constructor(message: string | Error) {
-    Object.assign(this.error, message instanceof Error ? message : new Error(message));
+    this.error = (message instanceof Error ? message : new Error(message)) as ServerError;
     this.error.extensions = {
       code: ErrorCode.ERR_NOT_FOUND,
     };

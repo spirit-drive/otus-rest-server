@@ -1,6 +1,6 @@
 import { Express } from 'express';
-import { signup } from './profile/signup';
-import { signin } from './profile/signin';
+import { signup } from './auth/signup';
+import { signin } from './auth/signin';
 import { profile } from './profile/profile';
 import { update } from './profile/update';
 import { authentication } from './authentication';

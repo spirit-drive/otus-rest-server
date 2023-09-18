@@ -1,7 +1,7 @@
 import { ParamsDictionary, RequestHandler } from 'express-serve-static-core';
 import { AuthResult, SignBody } from '../../server.types';
 import { UserDocument, UserModel } from '../../models/User';
-import { AccountAlreadyExistError, DataBaseError, ServerErrorJson } from '../../Errors';
+import { AccountAlreadyExistError, DataBaseError, ValidationError, ServerErrorJson } from '../../Errors';
 import { sign } from '../../utils/jwt';
 
 export const signup: RequestHandler<ParamsDictionary, AuthResult | ServerErrorJson, SignBody> = async (req, res) => {
@@ -19,6 +19,12 @@ export const signup: RequestHandler<ParamsDictionary, AuthResult | ServerErrorJs
   const user = new UserModel() as UserDocument;
   user.email = email;
   user.password = await user.generateHash(password);
+
+  const validationError = user.validateSync();
+  if (validationError) {
+    // Если есть ошибки валидации, отправляем ValidationError
+    return res.status(400).json(new ValidationError(validationError));
+  }
 
   try {
     await user.save();

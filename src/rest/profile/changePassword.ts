@@ -1,14 +1,13 @@
-import { ParamsDictionary, RequestHandler } from 'express-serve-static-core';
+import { RequestHandler } from 'express-serve-static-core';
 import { ChangePasswordBody, ChangePasswordResult } from '../../server.types';
 import { UserDocument } from '../../models/User';
 import { isValidPassword } from '../../models/User/helpers';
 import { DataBaseError, IncorrectPasswordError, InvalidPasswordError, ServerErrorJson } from '../../Errors';
 
-export const changePassword: RequestHandler<
-  ParamsDictionary,
-  ChangePasswordResult | ServerErrorJson,
-  ChangePasswordBody
-> = async (req, res) => {
+export const changePassword: RequestHandler<never, ChangePasswordResult | ServerErrorJson, ChangePasswordBody> = async (
+  req,
+  res
+) => {
   const { password, newPassword } = req.body;
   const user = req.user as UserDocument;
   if (!user.isRightPassword(password)) {

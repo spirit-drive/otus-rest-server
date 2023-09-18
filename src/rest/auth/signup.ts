@@ -1,10 +1,10 @@
-import { ParamsDictionary, RequestHandler } from 'express-serve-static-core';
+import { RequestHandler } from 'express-serve-static-core';
 import { AuthResult, SignBody } from '../../server.types';
 import { UserDocument, UserModel } from '../../models/User';
 import { AccountAlreadyExistError, DataBaseError, ValidationError, ServerErrorJson } from '../../Errors';
 import { sign } from '../../utils/jwt';
 
-export const signup: RequestHandler<ParamsDictionary, AuthResult | ServerErrorJson, SignBody> = async (req, res) => {
+export const signup: RequestHandler<never, AuthResult | ServerErrorJson, SignBody> = async (req, res) => {
   const { password, email } = req.body;
 
   let foundUsers;

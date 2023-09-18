@@ -36,6 +36,14 @@ export type Category = {
   createdAt: Date;
 };
 
+export type CategoryAddInput = Omit<Category, 'id' | 'createdAt'>;
+export type CategoryUpdateInput = Omit<Category, 'createdAt' | 'id'>;
+export type CategoryGetInput = Pick<Category, 'name'>;
+export type CategoryGetManyInput = Pick<Category, 'name'> & {
+  ids: string[];
+};
+export type StandardParams = { id: string };
+
 export type Product = {
   id: string;
   name: string;

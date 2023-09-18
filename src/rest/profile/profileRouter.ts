@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { profile } from '../profile/profile';
-import { update } from '../profile/update';
-import { changePassword } from '../profile/changePassword';
+import { profile } from './profile';
+import { update } from './update';
+import { changePassword } from './changePassword';
 
 export const profileRouter = Router();
 

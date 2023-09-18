@@ -1,0 +1,22 @@
+import { CategoryDocument } from '../../models/Category';
+import { Category } from '../../server.types';
+
+export const prepareCategory = async (item: CategoryDocument): Promise<Category> =>
+  item
+    ? {
+        id: item._id.toString(),
+        name: item.name,
+        photo: item.photo,
+        createdAt: item.createdAt,
+      }
+    : ({} as Category);
+
+export const prepareCategories = async (items: CategoryDocument[]): Promise<Category[]> => {
+  if (!items?.length) return [];
+
+  const result: Category[] = [];
+  for await (const item of items) {
+    result.push(await prepareCategory(item));
+  }
+  return result;
+};

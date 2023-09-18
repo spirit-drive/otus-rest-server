@@ -29,20 +29,48 @@ export type Profile = {
 
 export type User = Omit<Profile, 'email' | 'signUpDate'>;
 
-export type Message = {
+export type Category = {
   id: string;
-  author: User;
-  chatId: string;
-  date: Date;
-  content: string;
+  name: string;
+  photo?: string;
+  createdAt: Date;
 };
 
-export type SendMessageData = {
-  recipientIds: string[];
-  authorId: string;
-  content: string;
+export type Product = {
+  id: string;
+  name: string;
+  photo?: string;
+  desc?: string;
+  createdAt: Date;
+  oldPrice?: number;
+  price: number;
+  category: Category;
 };
 
-export type GetMessagesArgs = {
-  userIds: string[];
+export type Cost = {
+  id: string;
+  name: string;
+  desc?: string;
+  createdAt: Date;
+  amount: number;
+  category: Category;
+  type: 'Cost';
+};
+
+export type Profit = {
+  id: string;
+  name: string;
+  desc?: string;
+  createdAt: Date;
+  amount: number;
+  category: Category;
+  type: 'Profit';
+};
+
+export type Operation = Profit | Cost;
+
+export type Order = {
+  id: string;
+  products: Product[];
+  createdAt: Date;
 };

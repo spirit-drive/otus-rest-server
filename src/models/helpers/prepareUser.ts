@@ -1,6 +1,6 @@
 import { UserDocument, UserModel } from '../User';
 import { Message, User } from '../../server.types';
-import { MessageDocument } from '../Message';
+import { MessageDocument } from '../Category';
 
 export const prepareUser = (item: UserDocument): User => {
   if (!item) return {} as User;

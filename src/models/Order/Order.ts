@@ -21,6 +21,7 @@ export const OrderSchema = new mongoose.Schema<OrderDocument>(
       type: String,
       enum: Object.values(OrderStatus),
       required: true,
+      default: OrderStatus.PendingConfirmation,
     },
   },
   { timestamps: true }

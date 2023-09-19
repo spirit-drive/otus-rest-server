@@ -11,4 +11,4 @@ protectedRouter.use('/profile', profileRouter);
 protectedRouter.use('/categories', categoryRouter);
 protectedRouter.use('/products', productRouter);
 protectedRouter.use('/operations', operationRouter);
-protectedRouter.use('/order', orderRouter);
+protectedRouter.use('/orders', orderRouter);

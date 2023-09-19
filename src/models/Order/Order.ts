@@ -6,16 +6,14 @@ export type OrderDocument = Document &
   Omit<Order, 'id' | 'products'> & {
     productIds: string[];
   };
-export const OrderSchema = new mongoose.Schema<OrderDocument>({
-  productIds: {
-    type: [String],
-    required: true,
+export const OrderSchema = new mongoose.Schema<OrderDocument>(
+  {
+    productIds: {
+      type: [String],
+      required: true,
+    },
   },
-  createdAt: {
-    required: true,
-    type: Date,
-    default: () => new Date(),
-  },
-});
+  { timestamps: true }
+);
 
 export const OrderModel = mongoose.model('Order', OrderSchema);

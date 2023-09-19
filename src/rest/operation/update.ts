@@ -1,16 +1,18 @@
 import { RequestHandler } from 'express-serve-static-core';
-import { ProductModel } from '../../models/Product';
-import { prepareProduct } from './prepareProduct';
+import { OperationModel } from '../../models/Operation';
+import { prepareOperation } from './prepareOperation';
 import { DataBaseError, ValidationError, ServerErrors } from '../../Errors';
-import { Product, ProductUpdateInput, StandardParams } from '../../server.types';
+import { Operation, OperationUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 
-export const update: (patch?: boolean) => RequestHandler<StandardParams, Product | ServerErrors, ProductUpdateInput> =
+export const update: (
+  patch?: boolean
+) => RequestHandler<StandardParams, Operation | ServerErrors, OperationUpdateInput> =
   (patch?: boolean) => async (req, res) => {
     try {
       const { id } = req.params;
-      const entity = await ProductModel.findById(id);
-      updateModel(req.body, entity, ['name', 'photo', 'categoryId', 'desc', 'oldPrice', 'price'], patch);
+      const entity = await OperationModel.findById(id);
+      updateModel(req.body, entity, ['name', 'type', 'categoryId', 'desc', 'amount'], patch);
 
       // Выполняем валидацию перед сохранением
       const validationError = entity.validateSync();
@@ -20,7 +22,7 @@ export const update: (patch?: boolean) => RequestHandler<StandardParams, Product
       }
       // Если валидация успешна, сохраняем документ
       await entity.save();
-      res.send(await prepareProduct(entity));
+      res.send(await prepareOperation(entity));
     } catch (e) {
       res.status(500).json(new DataBaseError(e));
     }

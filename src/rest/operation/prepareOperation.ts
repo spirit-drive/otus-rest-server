@@ -1,30 +1,29 @@
-import { ProductDocument } from '../../models/Product';
-import { Product } from '../../server.types';
+import { OperationDocument } from '../../models/Operation';
+import { Operation } from '../../server.types';
 import { CategoryModel } from '../../models/Category';
 import { prepareCategory } from '../category/prepareCategory';
 
-export const prepareProduct = async (item: ProductDocument): Promise<Product> => {
+export const prepareOperation = async (item: OperationDocument): Promise<Operation> => {
   if (!item) return null;
   const category = await CategoryModel.findById(item.categoryId);
   return {
     id: item._id.toString(),
     name: item.name,
-    photo: item.photo,
     desc: item.desc,
     createdAt: item.createdAt,
-    oldPrice: item.oldPrice,
-    price: item.price,
     updatedAt: item.updatedAt,
+    type: item.type,
+    amount: item.amount,
     category: await prepareCategory(category),
   };
 };
 
-export const prepareProducts = async (items: ProductDocument[]): Promise<Product[]> => {
+export const prepareOperations = async (items: OperationDocument[]): Promise<Operation[]> => {
   if (!items?.length) return [];
 
-  const result: Product[] = [];
+  const result: Operation[] = [];
   for await (const item of items) {
-    result.push(await prepareProduct(item));
+    result.push(await prepareOperation(item));
   }
   return result;
 };

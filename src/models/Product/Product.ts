@@ -6,27 +6,25 @@ export type ProductDocument = Document &
   Omit<Product, 'id' | 'category'> & {
     categoryId: string;
   };
-export const ProductSchema = new mongoose.Schema<ProductDocument>({
-  name: {
-    type: String,
-    required: true,
+export const ProductSchema = new mongoose.Schema<ProductDocument>(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    categoryId: {
+      type: String,
+      required: true,
+    },
+    oldPrice: Number,
+    price: {
+      type: Number,
+      required: true,
+    },
+    photo: String,
+    desc: String,
   },
-  categoryId: {
-    type: String,
-    required: true,
-  },
-  oldPrice: Number,
-  price: {
-    type: Number,
-    required: true,
-  },
-  photo: String,
-  desc: String,
-  createdAt: {
-    required: true,
-    type: Date,
-    default: () => new Date(),
-  },
-});
+  { timestamps: true }
+);
 
 export const ProductModel = mongoose.model('Product', ProductSchema);

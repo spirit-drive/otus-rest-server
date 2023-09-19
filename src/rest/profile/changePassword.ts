@@ -2,9 +2,9 @@ import { RequestHandler } from 'express-serve-static-core';
 import { ChangePasswordBody, ChangePasswordResult } from '../../server.types';
 import { UserDocument } from '../../models/User';
 import { isValidPassword } from '../../models/User/helpers';
-import { DataBaseError, IncorrectPasswordError, InvalidPasswordError, ServerErrorJson } from '../../Errors';
+import { DataBaseError, IncorrectPasswordError, InvalidPasswordError, ServerErrors } from '../../Errors';
 
-export const changePassword: RequestHandler<never, ChangePasswordResult | ServerErrorJson, ChangePasswordBody> = async (
+export const changePassword: RequestHandler<never, ChangePasswordResult | ServerErrors, ChangePasswordBody> = async (
   req,
   res
 ) => {

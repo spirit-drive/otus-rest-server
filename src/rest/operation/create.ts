@@ -1,11 +1,11 @@
 import { RequestHandler } from 'express-serve-static-core';
-import { ProductModel } from '../../models/Product';
-import { prepareProduct } from './prepareProduct';
+import { OperationModel } from '../../models/Operation';
+import { prepareOperation } from './prepareOperation';
 import { DataBaseError, ValidationError, ServerErrors, FieldRequiredError, NotFoundError } from '../../Errors';
-import { Product, ProductAddInput } from '../../server.types';
+import { Operation, OperationAddInput } from '../../server.types';
 import { CategoryModel } from '../../models/Category';
 
-export const create: RequestHandler<never, Product | ServerErrors, ProductAddInput> = async (req, res) => {
+export const create: RequestHandler<never, Operation | ServerErrors, OperationAddInput> = async (req, res) => {
   try {
     if (!req.body.categoryId) {
       return res.status(400).json(new FieldRequiredError(`categoryId is required`, 'categoryId'));
@@ -13,7 +13,7 @@ export const create: RequestHandler<never, Product | ServerErrors, ProductAddInp
     if (!(await CategoryModel.findById(req.body.categoryId))) {
       return res.status(400).json(new NotFoundError(`category not found`, 'categoryId'));
     }
-    const entity = new ProductModel(req.body);
+    const entity = new OperationModel(req.body);
 
     // Выполняем валидацию перед сохранением
     const validationError = entity.validateSync();
@@ -23,7 +23,7 @@ export const create: RequestHandler<never, Product | ServerErrors, ProductAddInp
     }
     // Если валидация успешна, сохраняем документ
     await entity.save();
-    res.send(await prepareProduct(entity));
+    res.send(await prepareOperation(entity));
   } catch (e) {
     res.status(500).json(new DataBaseError(e));
   }

@@ -2,9 +2,9 @@ import { RequestHandler } from 'express-serve-static-core';
 import { Profile } from '../../server.types';
 import { UserDocument } from '../../models/User';
 import { prepareProfile } from './prepareProfile';
-import { DataBaseError, ValidationError, ServerErrorJson } from '../../Errors';
+import { DataBaseError, ValidationError, ServerErrors } from '../../Errors';
 
-export const update: (patch?: boolean) => RequestHandler<never, Profile | ServerErrorJson> =
+export const update: (patch?: boolean) => RequestHandler<never, Profile | ServerErrors> =
   (patch?: boolean) => async (req, res) => {
     try {
       const user = req.user as UserDocument;
@@ -15,7 +15,7 @@ export const update: (patch?: boolean) => RequestHandler<never, Profile | Server
       const validationError = user.validateSync();
       if (validationError) {
         // Если есть ошибки валидации, отправляем ValidationError
-        return res.status(400).json(new ValidationError(validationError.message));
+        return res.status(400).json(new ValidationError(validationError));
       }
       // Если валидация успешна, сохраняем документ
       await user.save();

@@ -34,23 +34,36 @@ export type Category = {
   name: string;
   photo?: string;
   createdAt: Date;
+  updatedAt: Date;
 };
 
-export type CategoryAddInput = Omit<Category, 'id' | 'createdAt'>;
-export type CategoryUpdateInput = Omit<Category, 'createdAt' | 'id'>;
+export type CategoryAddInput = Omit<Category, 'id' | 'createdAt' | 'updatedAt'>;
+export type CategoryUpdateInput = Omit<Category, 'id' | 'createdAt' | 'updatedAt'>;
 export type CategoryGetManyInput = Pick<Category, 'name'> & {
   ids: string[];
 };
 
-export type ProductAddInput = Omit<Product, 'id' | 'createdAt' | 'category'> & {
+export type ProductAddInput = Omit<Product, 'id' | 'createdAt' | 'category' | 'updatedAt'> & {
   categoryId: string;
 };
 
-export type ProductUpdateInput = Omit<Product, 'id' | 'createdAt' | 'category'> & {
+export type ProductUpdateInput = Omit<Product, 'id' | 'createdAt' | 'category' | 'updatedAt'> & {
   categoryId: string;
 };
 
 export type ProductGetManyInput = Pick<Product, 'name'> & {
+  ids: string[];
+};
+
+export type OperationAddInput = Omit<Operation, 'id' | 'createdAt' | 'category' | 'updatedAt'> & {
+  categoryId: string;
+};
+
+export type OperationUpdateInput = Omit<Operation, 'id' | 'createdAt' | 'category' | 'updatedAt'> & {
+  categoryId: string;
+};
+
+export type OperationGetManyInput = Pick<Operation, 'name'> & {
   ids: string[];
 };
 
@@ -62,6 +75,7 @@ export type Product = {
   photo?: string;
   desc?: string;
   createdAt: Date;
+  updatedAt: Date;
   oldPrice?: number;
   price: number;
   category: Category;
@@ -72,6 +86,7 @@ export type Cost = {
   name: string;
   desc?: string;
   createdAt: Date;
+  updatedAt: Date;
   amount: number;
   category: Category;
   type: 'Cost';
@@ -82,6 +97,7 @@ export type Profit = {
   name: string;
   desc?: string;
   createdAt: Date;
+  updatedAt: Date;
   amount: number;
   category: Category;
   type: 'Profit';
@@ -93,4 +109,5 @@ export type Order = {
   id: string;
   products: Product[];
   createdAt: Date;
+  updatedAt: Date;
 };

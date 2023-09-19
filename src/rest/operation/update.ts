@@ -1,9 +1,10 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OperationModel } from '../../models/Operation';
 import { prepareOperation } from './prepareOperation';
-import { DataBaseError, ValidationError, ServerErrors } from '../../Errors';
+import { DataBaseError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
 import { Operation, OperationUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
+import { CategoryModel } from '../../models/Category';
 
 export const update: (
   patch?: boolean
@@ -13,6 +14,9 @@ export const update: (
       const { id } = req.params;
       const entity = await OperationModel.findById(id);
       updateModel(req.body, entity, ['name', 'type', 'categoryId', 'desc', 'amount'], patch);
+      if (!(await CategoryModel.findById(entity.categoryId))) {
+        return res.status(400).json(new NotFoundError(`category not found`, 'categoryId'));
+      }
 
       // Выполняем валидацию перед сохранением
       const validationError = entity.validateSync();

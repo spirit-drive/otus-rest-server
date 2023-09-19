@@ -67,6 +67,22 @@ export type OperationGetManyInput = Pick<Operation, 'name'> & {
   ids: string[];
 };
 
+export type OrderAddInput = Omit<Order, 'id' | 'createdAt' | 'products' | 'user' | 'updatedAt'> & {
+  productIds: string[];
+  userId: string;
+};
+
+export type OrderUpdateInput = Omit<Order, 'id' | 'createdAt' | 'products' | 'user' | 'updatedAt'> & {
+  productIds: string[];
+  userId: string;
+};
+
+export type OrderGetManyInput = {
+  ids: string[];
+  productIds: string[];
+  userId: string;
+};
+
 export type StandardParams = { id: string };
 
 export type Product = {
@@ -105,9 +121,22 @@ export type Profit = {
 
 export type Operation = Profit | Cost;
 
+export enum OrderStatus {
+  PendingConfirmation = 'pending_confirmation',
+  Processing = 'processing',
+  Packaging = 'packaging',
+  WaitingForDelivery = 'waiting_for_delivery',
+  InTransit = 'in_transit',
+  Delivered = 'delivered',
+  ReturnRequested = 'return_requested',
+  OrderCancelled = 'order_cancelled',
+}
+
 export type Order = {
   id: string;
   products: Product[];
+  user: User;
+  status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
 };

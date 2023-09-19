@@ -9,7 +9,7 @@ export const prepareCategory = async (item: CategoryDocument): Promise<Category>
         photo: item.photo,
         createdAt: item.createdAt,
       }
-    : ({} as Category);
+    : null;
 
 export const prepareCategories = async (items: CategoryDocument[]): Promise<Category[]> => {
   if (!items?.length) return [];

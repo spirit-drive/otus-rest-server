@@ -38,10 +38,22 @@ export type Category = {
 
 export type CategoryAddInput = Omit<Category, 'id' | 'createdAt'>;
 export type CategoryUpdateInput = Omit<Category, 'createdAt' | 'id'>;
-export type CategoryGetInput = Pick<Category, 'name'>;
 export type CategoryGetManyInput = Pick<Category, 'name'> & {
   ids: string[];
 };
+
+export type ProductAddInput = Omit<Product, 'id' | 'createdAt' | 'category'> & {
+  categoryId: string;
+};
+
+export type ProductUpdateInput = Omit<Product, 'id' | 'createdAt' | 'category'> & {
+  categoryId: string;
+};
+
+export type ProductGetManyInput = Pick<Product, 'name'> & {
+  ids: string[];
+};
+
 export type StandardParams = { id: string };
 
 export type Product = {

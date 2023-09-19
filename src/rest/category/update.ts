@@ -17,12 +17,11 @@ export const update: (
       const validationError = entity.validateSync();
       if (validationError) {
         // Если есть ошибки валидации, отправляем ValidationError
-        res.status(400).json(new ValidationError(validationError.message));
-      } else {
-        // Если валидация успешна, сохраняем документ
-        await entity.save();
-        res.send(await prepareCategory(entity));
+        return res.status(400).json(new ValidationError(validationError.message));
       }
+      // Если валидация успешна, сохраняем документ
+      await entity.save();
+      res.send(await prepareCategory(entity));
     } catch (e) {
       res.status(500).json(new DataBaseError(e));
     }

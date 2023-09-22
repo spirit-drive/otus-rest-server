@@ -4,6 +4,7 @@ import { prepareProduct } from './prepareProduct';
 import { DataBaseError, ValidationError, ServerErrors, FieldRequiredError, NotFoundError } from '../../Errors';
 import { Product, ProductAddInput } from '../../server.types';
 import { CategoryModel } from '../../models/Category';
+import { UserDocument } from '../../models/User';
 
 export const create: RequestHandler<never, Product | ServerErrors, ProductAddInput> = async (req, res) => {
   try {
@@ -13,7 +14,7 @@ export const create: RequestHandler<never, Product | ServerErrors, ProductAddInp
     if (!(await CategoryModel.findById(req.body.categoryId))) {
       return res.status(400).json(new NotFoundError(`category not found`, 'categoryId'));
     }
-    const entity = new ProductModel(req.body);
+    const entity = new ProductModel({ ...req.body, commandId: (req.user as UserDocument)?.commandId });
 
     // Выполняем валидацию перед сохранением
     const validationError = entity.validateSync();

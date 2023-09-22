@@ -1,15 +1,18 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OrderModel } from '../../models/Order';
 import { prepareOrder } from './prepareOrder';
-import { DataBaseError, ValidationError, ServerErrors } from '../../Errors';
+import { DataBaseError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
 import { Order, OrderUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
+import { UserDocument } from '../../models/User';
 
 export const update: (patch?: boolean) => RequestHandler<StandardParams, Order | ServerErrors, OrderUpdateInput> =
   (patch?: boolean) => async (req, res) => {
     try {
       const { id } = req.params;
-      const entity = await OrderModel.findById(id);
+      const { commandId } = (req.user || {}) as UserDocument;
+      const entity = await OrderModel.findOne({ _id: id, commandId });
+      if (!entity) return res.status(500).json(new NotFoundError(`Order with id: "${id}" not found`));
       updateModel(req.body, entity, ['productIds', 'userId', 'status'], patch);
 
       // Выполняем валидацию перед сохранением

@@ -5,6 +5,7 @@ import { Product } from '../../server.types';
 export type ProductDocument = Document &
   Omit<Product, 'id' | 'category'> & {
     categoryId: string;
+    commandId: string;
   };
 export const ProductSchema = new mongoose.Schema<ProductDocument>(
   {
@@ -23,6 +24,7 @@ export const ProductSchema = new mongoose.Schema<ProductDocument>(
     },
     photo: String,
     desc: String,
+    commandId: String,
   },
   { timestamps: true }
 );

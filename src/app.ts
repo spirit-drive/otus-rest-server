@@ -24,6 +24,7 @@ import { mainRouter } from './rest/routes/mainRouter';
   app.use(express.json());
   app.use(cors());
 
+  app.get('/hello', (_, res) => res.send('hello'));
   app.use('/api', mainRouter);
 
   const root = path.join(process.cwd(), 'dist');

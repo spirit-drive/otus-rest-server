@@ -3,11 +3,13 @@ import { OrderModel } from '../../models/Order';
 import { prepareOrders } from './prepareOrder';
 import { DataBaseError, ServerErrors } from '../../Errors';
 import { Order, OrderGetManyInput } from '../../server.types';
+import { UserDocument } from '../../models/User';
 
 export const getMany: RequestHandler<never, Order[] | ServerErrors, OrderGetManyInput> = async (req, res) => {
   try {
+    const { commandId } = (req.user || {}) as UserDocument;
     const { ids, userId, productIds } = req.body;
-    const query = OrderModel.find();
+    const query = OrderModel.find({ commandId });
     if (ids?.length) {
       query.where('_id', { $in: ids });
     }

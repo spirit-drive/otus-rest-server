@@ -8,6 +8,7 @@ enum ErrorCode {
   ERR_ACCOUNT_ALREADY_EXIST = 'ERR_ACCOUNT_ALREADY_EXIST',
   ERR_INVALID_PASSWORD = 'ERR_INVALID_PASSWORD',
   ERR_AUTH = 'ERR_AUTH',
+  ERR_NOT_ALLOWED = 'ERR_NOT_ALLOWED',
   ERR_DATA_BASE_ERROR = 'ERR_DATA_BASE_ERROR',
   ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR',
 }
@@ -110,5 +111,10 @@ export class NotFoundError extends ServerErrors {
 export class FieldRequiredError extends ServerErrors {
   constructor(message: string | Error, fieldName?: string) {
     super(message, ErrorCode.ERR_FIELD_REQUIRED, 'FieldRequiredError', fieldName);
+  }
+}
+export class NotAllowedError extends ServerErrors {
+  constructor(message: string | Error, fieldName?: string) {
+    super(message, ErrorCode.ERR_NOT_ALLOWED, 'NotAllowedError', fieldName);
   }
 }

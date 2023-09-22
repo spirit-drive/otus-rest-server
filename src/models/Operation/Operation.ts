@@ -5,6 +5,7 @@ import { Operation } from '../../server.types';
 export type OperationDocument = Document &
   Omit<Operation, 'id' | 'category'> & {
     categoryId: string;
+    commandId: string;
   };
 export const OperationSchema = new mongoose.Schema<OperationDocument>(
   {
@@ -26,6 +27,7 @@ export const OperationSchema = new mongoose.Schema<OperationDocument>(
       required: true,
     },
     desc: String,
+    commandId: String,
   },
   { timestamps: true }
 );

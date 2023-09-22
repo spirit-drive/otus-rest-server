@@ -3,10 +3,11 @@ import { CategoryModel } from '../../models/Category';
 import { prepareCategory } from './prepareCategory';
 import { DataBaseError, ValidationError, ServerErrors } from '../../Errors';
 import { Category, CategoryAddInput } from '../../server.types';
+import { UserDocument } from '../../models/User';
 
 export const create: RequestHandler<never, Category | ServerErrors, CategoryAddInput> = async (req, res) => {
   try {
-    const entity = new CategoryModel(req.body);
+    const entity = new CategoryModel({ ...req.body, commandId: (req.user as UserDocument)?.commandId });
 
     // Выполняем валидацию перед сохранением
     const validationError = entity.validateSync();

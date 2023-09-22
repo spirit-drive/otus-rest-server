@@ -5,12 +5,15 @@ import { DataBaseError, ValidationError, ServerErrors, NotFoundError } from '../
 import { Product, ProductUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 import { CategoryModel } from '../../models/Category';
+import { UserDocument } from '../../models/User';
 
 export const update: (patch?: boolean) => RequestHandler<StandardParams, Product | ServerErrors, ProductUpdateInput> =
   (patch?: boolean) => async (req, res) => {
     try {
       const { id } = req.params;
-      const entity = await ProductModel.findById(id);
+      const { commandId } = (req.user || {}) as UserDocument;
+      const entity = await ProductModel.findOne({ _id: id, commandId });
+      if (!entity) return res.status(500).json(new NotFoundError(`Product with id: "${id}" not found`));
       updateModel(req.body, entity, ['name', 'photo', 'categoryId', 'desc', 'oldPrice', 'price'], patch);
       if (!(await CategoryModel.findById(entity.categoryId))) {
         return res.status(400).json(new NotFoundError(`category not found`, 'categoryId'));

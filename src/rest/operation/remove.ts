@@ -3,11 +3,13 @@ import { OperationModel } from '../../models/Operation';
 import { prepareOperation } from './prepareOperation';
 import { DataBaseError, NotFoundError, ServerErrors } from '../../Errors';
 import { Operation, StandardParams } from '../../server.types';
+import { UserDocument } from '../../models/User';
 
 export const remove: RequestHandler<StandardParams, Operation | ServerErrors> = async (req, res) => {
   try {
     const { id } = req.params;
-    const entity = await OperationModel.findByIdAndRemove(id);
+    const { commandId } = (req.user || {}) as UserDocument;
+    const entity = await OperationModel.findOneAndRemove({ _id: id, commandId });
 
     if (!entity) return res.status(500).json(new NotFoundError(`Operation with id: "${id}" not found`));
     res.send(await prepareOperation(entity));

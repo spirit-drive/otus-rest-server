@@ -5,6 +5,7 @@ import { DataBaseError, ValidationError, ServerErrors, NotFoundError } from '../
 import { Operation, OperationUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 import { CategoryModel } from '../../models/Category';
+import { UserDocument } from '../../models/User';
 
 export const update: (
   patch?: boolean
@@ -12,7 +13,9 @@ export const update: (
   (patch?: boolean) => async (req, res) => {
     try {
       const { id } = req.params;
-      const entity = await OperationModel.findById(id);
+      const { commandId } = (req.user || {}) as UserDocument;
+      const entity = await OperationModel.findOne({ _id: id, commandId });
+      if (!entity) return res.status(500).json(new NotFoundError(`Operation with id: "${id}" not found`));
       updateModel(req.body, entity, ['name', 'type', 'categoryId', 'desc', 'amount'], patch);
       if (!(await CategoryModel.findById(entity.categoryId))) {
         return res.status(400).json(new NotFoundError(`category not found`, 'categoryId'));

@@ -6,6 +6,7 @@ export type OrderDocument = Document &
   Omit<Order, 'id' | 'products' | 'user'> & {
     productIds: string[];
     userId: string;
+    commandId: string;
   };
 export const OrderSchema = new mongoose.Schema<OrderDocument>(
   {
@@ -17,6 +18,7 @@ export const OrderSchema = new mongoose.Schema<OrderDocument>(
       type: String,
       required: true,
     },
+    commandId: String,
     status: {
       type: String,
       enum: Object.values(OrderStatus),

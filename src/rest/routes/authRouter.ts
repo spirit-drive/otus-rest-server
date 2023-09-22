@@ -7,7 +7,3 @@ export const authRouter = Router();
 authRouter.post('/signup', signup);
 
 authRouter.post('/signin', signin);
-
-authRouter.get('/hello', (_, res) => {
-  res.send('hello');
-});

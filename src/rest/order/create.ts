@@ -3,7 +3,7 @@ import { OrderModel } from '../../models/Order';
 import { prepareOrder } from './prepareOrder';
 import { DataBaseError, ValidationError, ServerErrors, FieldRequiredError, NotFoundError } from '../../Errors';
 import { Order, OrderAddInput } from '../../server.types';
-import { UserModel } from '../../models/User';
+import { UserDocument, UserModel } from '../../models/User';
 import { ProductModel } from '../../models/Product';
 
 export const isExistProducts = async (productIds: string[]): Promise<boolean> => {
@@ -28,7 +28,7 @@ export const create: RequestHandler<never, Order | ServerErrors, OrderAddInput> 
     if (!(await isExistProducts(req.body.productIds))) {
       return res.status(400).json(new NotFoundError(`not all products found`, 'productIds'));
     }
-    const entity = new OrderModel(req.body);
+    const entity = new OrderModel({ ...req.body, commandId: (req.user as UserDocument)?.commandId });
 
     // Выполняем валидацию перед сохранением
     const validationError = entity.validateSync();

@@ -4,6 +4,7 @@ import { prepareOperation } from './prepareOperation';
 import { DataBaseError, ValidationError, ServerErrors, FieldRequiredError, NotFoundError } from '../../Errors';
 import { Operation, OperationAddInput } from '../../server.types';
 import { CategoryModel } from '../../models/Category';
+import { UserDocument } from '../../models/User';
 
 export const create: RequestHandler<never, Operation | ServerErrors, OperationAddInput> = async (req, res) => {
   try {
@@ -13,7 +14,7 @@ export const create: RequestHandler<never, Operation | ServerErrors, OperationAd
     if (!(await CategoryModel.findById(req.body.categoryId))) {
       return res.status(400).json(new NotFoundError(`category not found`, 'categoryId'));
     }
-    const entity = new OperationModel(req.body);
+    const entity = new OperationModel({ ...req.body, commandId: (req.user as UserDocument)?.commandId });
 
     // Выполняем валидацию перед сохранением
     const validationError = entity.validateSync();

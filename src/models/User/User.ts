@@ -5,6 +5,7 @@ import { Profile } from '../../server.types';
 
 export type UserMain = Profile & {
   password: string;
+  commandId: string;
 };
 
 export type UserMethods = {
@@ -37,6 +38,7 @@ export const UserSchema = new mongoose.Schema<UserDocument>({
     required: true,
     type: String,
   },
+  commandId: String,
   signUpDate: {
     required: true,
     type: Date,

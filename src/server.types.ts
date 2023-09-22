@@ -2,7 +2,13 @@ export type AuthResult = {
   token: string;
 };
 
-export type SignBody = {
+export type SignUpBody = {
+  email: string;
+  password: string;
+  commandId: string;
+};
+
+export type SignInBody = {
   email: string;
   password: string;
 };

@@ -1,11 +1,11 @@
 import { RequestHandler } from 'express-serve-static-core';
-import { AuthResult, SignBody } from '../../server.types';
+import { AuthResult, SignUpBody } from '../../server.types';
 import { UserDocument, UserModel } from '../../models/User';
 import { AccountAlreadyExistError, DataBaseError, ValidationError, ServerErrors } from '../../Errors';
 import { sign } from '../../utils/jwt';
 
-export const signup: RequestHandler<never, AuthResult | ServerErrors, SignBody> = async (req, res) => {
-  const { password, email } = req.body;
+export const signup: RequestHandler<never, AuthResult | ServerErrors, SignUpBody> = async (req, res) => {
+  const { password, email, commandId } = req.body;
 
   let foundUsers;
   try {
@@ -18,6 +18,7 @@ export const signup: RequestHandler<never, AuthResult | ServerErrors, SignBody> 
   }
   const user = new UserModel() as UserDocument;
   user.email = email;
+  user.commandId = commandId;
   user.password = await user.generateHash(password);
 
   const validationError = user.validateSync();

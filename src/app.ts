@@ -27,9 +27,5 @@ import { mainRouter } from './rest/routes/mainRouter';
   app.get('/hello', (_, res) => res.send('hello'));
   app.use('/api', mainRouter);
 
-  const root = path.join(process.cwd(), 'dist');
-  app.use(express.static(root));
-  app.get('*', (_, res) => res.sendFile('index.html', { root }));
-
   httpServer.listen(port, () => console.log(`🚀 Server ready at http://localhost:${port}`));
 })();

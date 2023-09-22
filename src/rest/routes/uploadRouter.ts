@@ -3,6 +3,7 @@ import { UploadedFile } from 'express-fileupload';
 import * as path from 'path';
 import * as fs from 'fs';
 import { DataBaseError, NoFilesError } from '../../Errors';
+import * as config from '../../config.json';
 export const uploadRouter = Router();
 
 export const assetsPath = path.join(process.cwd(), 'src', 'assets');
@@ -20,6 +21,6 @@ uploadRouter.post('/upload', function (req, res) {
 
   file.mv(uploadPath, function (err) {
     if (err) return res.status(500).json(new DataBaseError(err));
-    res.send({ url: `/img/${name}` });
+    res.send({ url: `${config.url}/img/${name}` });
   });
 });

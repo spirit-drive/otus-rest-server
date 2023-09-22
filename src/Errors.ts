@@ -8,6 +8,7 @@ enum ErrorCode {
   ERR_ACCOUNT_ALREADY_EXIST = 'ERR_ACCOUNT_ALREADY_EXIST',
   ERR_INVALID_PASSWORD = 'ERR_INVALID_PASSWORD',
   ERR_AUTH = 'ERR_AUTH',
+  ERR_NO_FILES = 'ERR_NO_FILES',
   ERR_NOT_ALLOWED = 'ERR_NOT_ALLOWED',
   ERR_DATA_BASE_ERROR = 'ERR_DATA_BASE_ERROR',
   ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR',
@@ -116,5 +117,10 @@ export class FieldRequiredError extends ServerErrors {
 export class NotAllowedError extends ServerErrors {
   constructor(message: string | Error, fieldName?: string) {
     super(message, ErrorCode.ERR_NOT_ALLOWED, 'NotAllowedError', fieldName);
+  }
+}
+export class NoFilesError extends ServerErrors {
+  constructor(message: string | Error, fieldName?: string) {
+    super(message, ErrorCode.ERR_NO_FILES, 'NoFilesError', fieldName);
   }
 }

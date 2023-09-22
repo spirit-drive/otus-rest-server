@@ -451,7 +451,11 @@ type Params = {
 
 ```json
 {
+<<<<<<< HEAD
   "url": "..."
+=======
+  "url": "/img/..."
+>>>>>>> origin/main
 }
 ```
 

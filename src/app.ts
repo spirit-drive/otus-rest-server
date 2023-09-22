@@ -4,8 +4,10 @@ import { createServer } from 'http';
 import * as passport from 'passport';
 import config from './db.config';
 import * as mongoose from 'mongoose';
-import * as path from 'path';
+import * as fileUpload from 'express-fileupload';
 import { mainRouter } from './rest/routes/mainRouter';
+import * as path from 'path';
+import { assetsPath } from './rest/routes/uploadRouter';
 
 (async () => {
   const app = express();
@@ -19,6 +21,8 @@ import { mainRouter } from './rest/routes/mainRouter';
 
   const port = parseInt(process.env.PORT) || 4011;
 
+  app.use(fileUpload());
+
   app.use(passport.initialize());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
@@ -26,6 +30,9 @@ import { mainRouter } from './rest/routes/mainRouter';
 
   app.get('/hello', (_, res) => res.send('hello'));
   app.use('/api', mainRouter);
+  app.get('/img/*', (req, res) => {
+    res.sendFile(path.join(assetsPath, ...req.path.replace('/img/', '').split('/')));
+  });
 
   httpServer.listen(port, () => console.log(`🚀 Server ready at http://localhost:${port}`));
 })();

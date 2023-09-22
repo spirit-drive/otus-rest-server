@@ -4,6 +4,7 @@ import { categoryRouter } from '../category/categoryRouter';
 import { productRouter } from '../product/productRouter';
 import { operationRouter } from '../operation/operationRouter';
 import { orderRouter } from '../order/orderRouter';
+import { uploadRouter } from './uploadRouter';
 
 export const protectedRouter = Router();
 
@@ -12,3 +13,4 @@ protectedRouter.use('/categories', categoryRouter);
 protectedRouter.use('/products', productRouter);
 protectedRouter.use('/operations', operationRouter);
 protectedRouter.use('/orders', orderRouter);
+protectedRouter.use('/', uploadRouter);

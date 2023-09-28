@@ -474,6 +474,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     method: 'POST',
     body,
   })
+    .then(res => res.json())
     .then(({ url }) => onChange(url))
     .catch((err) => {
       console.error(err);

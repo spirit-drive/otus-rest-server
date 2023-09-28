@@ -84,7 +84,28 @@ type Product = {
 };
 ```
 
-### Запросы не требующие токена
+#### Дополнительные типы
+```ts
+export type Pagination = {
+  pageSize: number;
+  pageNumber: number;
+};
+
+export type Sorting = {
+  type: 'ASC' | 'DESC';
+  field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+};
+```
+
+
+### Работа с токеном
+
+Некоторые запросы открытые, другие - защищенные (**PROTECTED**)
+
+Для отправки защищенных запросов нужно добавить токен в заголовок **authorization** и добавить префикс: `Bearer ${token}`
+
+Токен можно получить при авторизации и необходимо его сохранять локально.
+
 
 #### Авторизация
 
@@ -127,12 +148,8 @@ type AuthResult = {
 };
 ```
 
-### Запросы требующие токен
-
-Нужно добавить токен в заголовок **authorization** и добавить префикс: `Bearer ${token}`
-
 #### Профиль
-##### /profile GET
+##### /profile GET **PROTECTED**
 Возвращает данные профиля
 
 Возвращает
@@ -144,7 +161,7 @@ export type Profile = {
   signUpDate: Date;
 };
 ```
-##### /profile POST | PUT | PATCH
+##### /profile POST | PUT | PATCH **PROTECTED**
 Изменяет данные профиля. PATCH изменяет частично
 
 Параметры
@@ -163,7 +180,8 @@ export type Profile = {
   signUpDate: Date;
 };
 ```
-##### /profile/change-password POST
+##### /profile/change-password POST **PROTECTED**
+
 Изменяет пароль профиля
 
 Параметры
@@ -183,19 +201,38 @@ type ChangePasswordResult = {
 
 #### Категории (Общее)
 ##### /categories GET
-Запрос по фильтрам
+Запрос по фильтрам. Авторизация не обязательна, но с ней вы будете видеть только свои данные, а не всех учеников
 
 Параметры
 ```ts
 type Filters = {
   name?: string;
   ids?: string[];
+  pagination?: Pagination;
+  sorting?: Sorting;
 };
 ```
 
-Возвращает массив сущностей
+Возвращает
 
-##### /categories POST
+```ts
+[
+  {
+    data: Category[];
+    pagination: {
+      pageSize: number;
+      pageNumber: number;
+      total: number;
+    };
+    sorting: {
+      type: 'ASC' | 'DESC';
+      field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+    }
+  }
+]
+```
+
+##### /categories POST **PROTECTED**
 Создает новую сущность
 
 Параметры
@@ -209,12 +246,12 @@ type Params = {
 Возвращает получившуюся сущность
 
 ##### /categories/:id GET
-Возвращает по id
+Возвращает по id.  Авторизация не обязательна, но с ней вы будете видеть только свои данные, а не всех учеников
 
-##### /categories/:id DELETE
+##### /categories/:id DELETE **PROTECTED**
 Удаляет по id и возвращает
 
-##### /categories/:id PUT
+##### /categories/:id PUT **PROTECTED**
 Обновляет по id и возвращает
 
 Параметры
@@ -227,7 +264,7 @@ type Params = {
 
 Возвращает получившуюся сущность
 
-##### /categories/:id PATCH
+##### /categories/:id PATCH **PROTECTED**
 Обновляет по id и возвращает.
 Пустые параметры запроса не сбрасывают существующие данные
 
@@ -243,19 +280,38 @@ type Params = {
 
 #### Продукты (Интернет-магазин)
 ##### /products GET
-Запрос фильтрам
+Запрос фильтрам. Авторизация не обязательна, но с ней вы будете видеть только свои данные, а не всех учеников
 
 Параметры
 ```ts
 type Filters = {
   name?: string;
   ids?: string[];
+  pagination?: Pagination;
+  sorting?: Sorting;
 };
 ```
 
-Возвращает массив сущностей
+Возвращает 
 
-##### /products POST
+```ts
+[
+  {
+    data: Product[];
+    pagination: {
+      pageSize: number;
+      pageNumber: number;
+      total: number;
+    };
+    sorting: {
+      type: 'ASC' | 'DESC';
+      field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+    }
+  }
+]
+```
+
+##### /products POST **PROTECTED**
 Создает новую сущность
 
 Параметры
@@ -273,12 +329,12 @@ type Params = {
 Возвращает получившуюся сущность
 
 ##### /products/:id GET
-Возвращает по id
+Возвращает по id. Авторизация не обязательна, но с ней вы будете видеть только свои данные, а не всех учеников
 
-##### /products/:id DELETE
+##### /products/:id DELETE **PROTECTED**
 Удаляет по id и возвращает
 
-##### /products/:id PUT
+##### /products/:id PUT **PROTECTED**
 Обновляет по id и возвращает
 
 Параметры
@@ -295,7 +351,7 @@ type Params = {
 
 Возвращает получившуюся сущность
 
-##### /products/:id PATCH
+##### /products/:id PATCH **PROTECTED**
 Обновляет по id и возвращает.
 Пустые параметры запроса не сбрасывают существующие данные
 
@@ -315,7 +371,7 @@ type Params = {
 
 #### Заказы (Интернет-магазин)
 ##### /orders GET
-Запрос фильтрам
+Запрос фильтрам. Авторизация не обязательна, но с ней вы будете видеть только свои данные, а не всех учеников
 
 Параметры
 ```ts
@@ -324,12 +380,31 @@ type Filters = {
   userId?: string;
   ids?: string[];
   status?: OrderStatus;
+  pagination?: Pagination;
+  sorting?: Sorting;
 };
 ```
 
-Возвращает массив сущностей
+Возвращает
 
-##### /orders POST
+```ts
+[
+  {
+    data: Order[];
+    pagination: {
+      pageSize: number;
+      pageNumber: number;
+      total: number;
+    };
+    sorting: {
+      type: 'ASC' | 'DESC';
+      field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+    }
+  }
+]
+```
+
+##### /orders POST **PROTECTED**
 Создает новую сущность
 
 Параметры
@@ -345,12 +420,12 @@ type Params = {
 Возвращает получившуюся сущность
 
 ##### /orders/:id GET
-Возвращает по id
+Возвращает по id. Авторизация не обязательна, но с ней вы будете видеть только свои данные, а не всех учеников
 
-##### /orders/:id DELETE
+##### /orders/:id DELETE **PROTECTED**
 Удаляет по id и возвращает
 
-##### /orders/:id PUT
+##### /orders/:id PUT **PROTECTED**
 Обновляет по id и возвращает
 
 Параметры
@@ -364,7 +439,7 @@ type Params = {
 
 Возвращает получившуюся сущность
 
-##### /orders/:id PATCH
+##### /orders/:id PATCH **PROTECTED**
 Обновляет по id и возвращает.
 Пустые параметры запроса не сбрасывают существующие данные
 
@@ -381,19 +456,38 @@ type Params = {
 
 #### Операции (Учет доходов/расходов)
 ##### /operations GET
-Запрос фильтрам
+Запрос фильтрам. Авторизация не обязательна, но с ней вы будете видеть только свои данные, а не всех учеников
 
 Параметры
 ```ts
 type Filters = {
   name?: string;
   ids?: string[];
+  pagination?: Pagination;
+  sorting?: Sorting;
 };
 ```
 
-Возвращает массив сущностей
+Возвращает 
 
-##### /operations POST
+```ts
+[
+  {
+    data: Operation[];
+    pagination: {
+      pageSize: number;
+      pageNumber: number;
+      total: number;
+    };
+    sorting: {
+      type: 'ASC' | 'DESC';
+      field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+    }
+  }
+]
+```
+
+##### /operations POST **PROTECTED**
 Создает новую сущность
 
 Параметры
@@ -410,12 +504,12 @@ type Params = {
 Возвращает получившуюся сущность
 
 ##### /operations/:id GET
-Возвращает по id
+Возвращает по id. Авторизация не обязательна, но с ней вы будете видеть только свои данные, а не всех учеников
 
-##### /operations/:id DELETE
+##### /operations/:id DELETE **PROTECTED**
 Удаляет по id и возвращает
 
-##### /operations/:id PUT
+##### /operations/:id PUT **PROTECTED**
 Обновляет по id и возвращает
 
 Параметры
@@ -431,7 +525,7 @@ type Params = {
 
 Возвращает получившуюся сущность
 
-##### /operations/:id PATCH
+##### /operations/:id PATCH **PROTECTED**
 Обновляет по id и возвращает.
 Пустые параметры запроса не сбрасывают существующие данные
 
@@ -449,7 +543,7 @@ type Params = {
 Возвращает получившуюся сущность
 
 #### Файлы (Общее)
-##### /upload POST
+##### /upload POST **PROTECTED**
 Загружает файлы на сервер.
 
 Возвращает
@@ -552,11 +646,11 @@ enum ErrorCode {
   ERR_FIELD_REQUIRED = 'ERR_FIELD_REQUIRED', // Обязательное поле. В ошибке будет дополнительное поле fieldName с указанием, какое конкретно поле обязательно
   ERR_INCORRECT_PASSWORD = 'ERR_INCORRECT_PASSWORD', // Некорректный старый пароль при попытке его изменить
   ERR_INVALID_PASSWORD = 'ERR_INVALID_PASSWORD', // Пароль не соответствует регулярному выражению /^[\w-@{}()#$%^&*+=!~]{8,}$/
-  ERR_AUTH = 'ERR_AUTH', // Токен не прошел авторизацию
+  ERR_AUTH = 'ERR_AUTH', // Токен не передан, либо не прошел авторизацию
   ERR_NO_FILES = 'ERR_NO_FILES', // Ошибка при загрузке файлов
   ERR_NOT_ALLOWED = 'ERR_NOT_ALLOWED', // Нет доступа к данной операции (нельзя редактировать заказ другого пользователя)
-  ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR', // Не валидные данные
   ERR_NOT_FOUND = 'ERR_NOT_FOUND', // Сущность не найдена
+  ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR', // Не валидные данные, например, не указано name
   
   ERR_DATA_BASE_ERROR = 'ERR_DATA_BASE_ERROR', // Обратитесь ко мне, этой ошибки быть не должно
 }

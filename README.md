@@ -21,15 +21,22 @@ type Category = {
 };
 ```
 #### Order
+
 ```ts
 type Order = {
   id: string;
-  products: Product[];
+  products: OrderProduct[];
   user: User;
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
 };
+
+type OrderProduct = {
+  id: string;
+  product: Product;
+  quantity: number;
+}
 
 enum OrderStatus {
   PendingConfirmation = 'pending_confirmation',

@@ -84,7 +84,7 @@ type Product = {
 };
 ```
 
-### Запросы
+### Запросы не требующие токена
 
 #### Авторизация
 
@@ -126,6 +126,10 @@ type AuthResult = {
   token: string;
 };
 ```
+
+### Запросы требующие токен
+
+Нужно добавить токен в заголовок **authorization** и добавить префикс: `Bearer ${token}`
 
 #### Профиль
 ##### /profile GET
@@ -177,7 +181,7 @@ type ChangePasswordResult = {
 };
 ```
 
-#### Категории
+#### Категории (Общее)
 ##### /categories GET
 Запрос по фильтрам
 
@@ -237,7 +241,7 @@ type Params = {
 
 Возвращает получившуюся сущность
 
-#### Продукты
+#### Продукты (Интернет-магазин)
 ##### /products GET
 Запрос фильтрам
 
@@ -309,7 +313,73 @@ type Params = {
 
 Возвращает получившуюся сущность
 
-#### Операции
+#### Заказы (Интернет-магазин)
+##### /orders GET
+Запрос фильтрам
+
+Параметры
+```ts
+type Filters = {
+  productIds?: string[];
+  userId?: string;
+  ids?: string[];
+  status?: OrderStatus;
+};
+```
+
+Возвращает массив сущностей
+
+##### /orders POST
+Создает новую сущность
+
+Параметры
+
+```ts
+type Params = {
+  productIds: string[];
+  userId: string; // Кто сделал заказ
+  status?: OrderStatus;
+};
+```
+
+Возвращает получившуюся сущность
+
+##### /orders/:id GET
+Возвращает по id
+
+##### /orders/:id DELETE
+Удаляет по id и возвращает
+
+##### /orders/:id PUT
+Обновляет по id и возвращает
+
+Параметры
+```ts
+type Params = {
+  productIds: string[];
+  userId: string; // Кто сделал заказ
+  status: OrderStatus;
+};
+```
+
+Возвращает получившуюся сущность
+
+##### /orders/:id PATCH
+Обновляет по id и возвращает.
+Пустые параметры запроса не сбрасывают существующие данные
+
+Параметры
+```ts
+type Params = {
+  productIds?: string[];
+  userId?: string; // Кто сделал заказ
+  status?: OrderStatus;
+};
+```
+
+Возвращает получившуюся сущность
+
+#### Операции (Учет доходов/расходов)
 ##### /operations GET
 Запрос фильтрам
 
@@ -378,72 +448,7 @@ type Params = {
 
 Возвращает получившуюся сущность
 
-#### Заказы
-##### /orders GET
-Запрос фильтрам
-
-Параметры
-```ts
-type Filters = {
-  productIds?: string[];
-  userId?: string;
-  ids?: string[];
-};
-```
-
-Возвращает массив сущностей
-
-##### /orders POST
-Создает новую сущность
-
-Параметры
-
-```ts
-type Params = {
-  productIds: string[];
-  userId: string; // Кто сделал заказ
-  status?: OrderStatus;
-};
-```
-
-Возвращает получившуюся сущность
-
-##### /orders/:id GET
-Возвращает по id
-
-##### /orders/:id DELETE
-Удаляет по id и возвращает
-
-##### /orders/:id PUT
-Обновляет по id и возвращает
-
-Параметры
-```ts
-type Params = {
-  productIds: string[];
-  userId: string; // Кто сделал заказ
-  status: OrderStatus;
-};
-```
-
-Возвращает получившуюся сущность
-
-##### /orders/:id PATCH
-Обновляет по id и возвращает.
-Пустые параметры запроса не сбрасывают существующие данные
-
-Параметры
-```ts
-type Params = {
-  productIds?: string[];
-  userId?: string; // Кто сделал заказ
-  status?: OrderStatus;
-};
-```
-
-Возвращает получившуюся сущность
-
-#### Файлы
+#### Файлы (Общее)
 ##### /upload POST
 Загружает файлы на сервер.
 

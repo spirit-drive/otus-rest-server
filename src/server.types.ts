@@ -1,3 +1,34 @@
+export type Pagination = {
+  pageSize: number;
+  pageNumber: number;
+};
+
+export enum SortType {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+export enum SortField {
+  id = 'id',
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
+  name = 'name',
+}
+
+export type Sorting = {
+  type: SortType;
+  field: SortField;
+};
+
+export type ResponsePagination = Pagination & {
+  total: number;
+};
+
+export type ResponseManyResult<T> = {
+  data: T;
+  sorting: Sorting;
+  pagination: ResponsePagination;
+};
+
 export type AuthResult = {
   token: string;
 };
@@ -46,7 +77,9 @@ export type Category = {
 export type CategoryAddInput = Omit<Category, 'id' | 'createdAt' | 'updatedAt'>;
 export type CategoryUpdateInput = Omit<Category, 'id' | 'createdAt' | 'updatedAt'>;
 export type CategoryGetManyInput = Pick<Category, 'name'> & {
-  ids: string[];
+  ids?: string[];
+  pagination?: Pagination;
+  sorting?: Sorting;
 };
 
 export type ProductAddInput = Omit<Product, 'id' | 'createdAt' | 'category' | 'updatedAt'> & {
@@ -58,7 +91,9 @@ export type ProductUpdateInput = Omit<Product, 'id' | 'createdAt' | 'category' |
 };
 
 export type ProductGetManyInput = Pick<Product, 'name'> & {
-  ids: string[];
+  ids?: string[];
+  pagination?: Pagination;
+  sorting?: Sorting;
 };
 
 export type OperationAddInput = Omit<Operation, 'id' | 'createdAt' | 'category' | 'updatedAt'> & {
@@ -70,24 +105,33 @@ export type OperationUpdateInput = Omit<Operation, 'id' | 'createdAt' | 'categor
 };
 
 export type OperationGetManyInput = Pick<Operation, 'name'> & {
-  ids: string[];
+  ids?: string[];
+  pagination?: Pagination;
+  sorting?: Sorting;
+};
+
+export type ProductInput = {
+  id: string;
+  quantity: number;
 };
 
 export type OrderAddInput = Omit<Order, 'id' | 'createdAt' | 'products' | 'user' | 'updatedAt'> & {
-  productIds: string[];
+  products: ProductInput[];
   userId: string;
 };
 
 export type OrderUpdateInput = Omit<Order, 'id' | 'createdAt' | 'products' | 'user' | 'updatedAt'> & {
-  productIds: string[];
+  products: ProductInput[];
   userId: string;
 };
 
 export type OrderGetManyInput = {
-  ids: string[];
-  productIds: string[];
-  userId: string;
-  status: OrderStatus;
+  ids?: string[];
+  productIds?: string[];
+  userId?: string;
+  status?: OrderStatus;
+  pagination?: Pagination;
+  sorting?: Sorting;
 };
 
 export type StandardParams = { id: string };

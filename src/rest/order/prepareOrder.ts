@@ -7,7 +7,7 @@ import { prepareUser } from '../../utils/prepareUser';
 
 export const prepareOrder = async (item: OrderDocument): Promise<Order> => {
   if (!item) return null;
-  const productDocs = await ProductModel.find({ _id: { $in: item.productIds } });
+  const productDocs = await ProductModel.find({ _id: { $in: item.products.map((i) => i.id) } });
   const userDoc = await UserModel.findById(item.userId);
   return {
     id: item._id.toString(),

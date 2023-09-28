@@ -5,15 +5,20 @@ import { DataBaseError, ValidationError, ServerErrors, NotFoundError } from '../
 import { Order, OrderUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 import { UserDocument } from '../../models/User';
+import { isExistProducts } from './helpers';
 
 export const update: (patch?: boolean) => RequestHandler<StandardParams, Order | ServerErrors, OrderUpdateInput> =
   (patch?: boolean) => async (req, res) => {
     try {
       const { id } = req.params;
       const { commandId } = (req.user || {}) as UserDocument;
+      if (!(await isExistProducts(req.body.products.map((i) => i.id)))) {
+        return res.status(400).json(new NotFoundError(`not all products found`, 'products'));
+      }
+
       const entity = await OrderModel.findOne({ _id: id, commandId });
       if (!entity) return res.status(500).json(new NotFoundError(`Order with id: "${id}" not found`));
-      updateModel(req.body, entity, ['productIds', 'userId', 'status'], patch);
+      updateModel(req.body, entity, ['products', 'userId', 'status'], patch);
 
       // Выполняем валидацию перед сохранением
       const validationError = entity.validateSync();

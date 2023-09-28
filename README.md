@@ -460,6 +460,74 @@ type Params = {
 }
 ```
 
+###### Пример выгрузки изображения на сервер с помощью fetch
+```tsx
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [file] = e.target.files;
+  const body = new FormData();
+  // важно использовать название file append('file', ...) иначе работать не будет
+  body.append('file', file);
+  fetch('http://19429ba06ff2.vps.myjino.ru/api/upload', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    method: 'POST',
+    body,
+  })
+    .then(({ url }) => onChange(url))
+    .catch((err) => {
+      console.error(err);
+    })
+};
+
+...
+
+<input type="file" onChange={handleChange} />
+```
+
+###### Пример выгрузки изображения на сервер с помощью XMLHttpRequest
+```tsx
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [file] = e.target.files;
+  const body = new FormData();
+  // важно использовать название file append('file', ...) иначе работать не будет
+  body.append('file', file);
+  new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.upload.onprogress = function (event) {
+      // Здесь можно получать количество отправленных данных на сервер, что позволяет сделать индикатор загрузки изображения  
+      onProgress(event.loaded, event.total);
+    };
+    xhr.onload = function () {
+      if (xhr.status !== 200) {
+        reject(xhr);
+      } else {
+        resolve(JSON.parse(xhr.response));
+      }
+    };
+
+    xhr.onerror = () => {
+      Object.assign(xhr, { message: 'unknown error' });
+      reject(xhr);
+    };
+
+    xhr.open('POST', 'http://19429ba06ff2.vps.myjino.ru/api/upload');
+
+    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+    xhr.send(body);
+  })
+    .then(({ url }) => onChange(url))
+    .catch((err) => {
+      console.error(err);
+    })
+};
+
+...
+
+<input type="file" onChange={handleChange} />
+```
+
 #### Ошибки
 
 Все ошибки с сервера приходят в формате
@@ -471,22 +539,24 @@ type ServerErrors = {
     };
 
     name: string;
+    fieldName?: string; // Существует при ошибке с кодом ERR_FIELD_REQUIRED
     stack: string;
     message: string;
   }[];
 }
 
 enum ErrorCode {
-  ERR_INCORRECT_EMAIL_OR_PASSWORD = 'ERR_INCORRECT_EMAIL_OR_PASSWORD',
-  ERR_NOT_FOUND = 'ERR_NOT_FOUND',
-  ERR_FIELD_REQUIRED = 'ERR_FIELD_REQUIRED',
-  ERR_INCORRECT_PASSWORD = 'ERR_INCORRECT_PASSWORD',
-  ERR_ACCOUNT_ALREADY_EXIST = 'ERR_ACCOUNT_ALREADY_EXIST',
-  ERR_INVALID_PASSWORD = 'ERR_INVALID_PASSWORD',
-  ERR_AUTH = 'ERR_AUTH',
-  ERR_NO_FILES = 'ERR_NO_FILES',
-  ERR_NOT_ALLOWED = 'ERR_NOT_ALLOWED',
-  ERR_DATA_BASE_ERROR = 'ERR_DATA_BASE_ERROR',
-  ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR',
+  ERR_INCORRECT_EMAIL_OR_PASSWORD = 'ERR_INCORRECT_EMAIL_OR_PASSWORD', // Если не корректный email или пароль
+  ERR_ACCOUNT_ALREADY_EXIST = 'ERR_ACCOUNT_ALREADY_EXIST', // При регистрации если пользователь уже существует
+  ERR_FIELD_REQUIRED = 'ERR_FIELD_REQUIRED', // Обязательное поле. В ошибке будет дополнительное поле fieldName с указанием, какое конкретно поле обязательно
+  ERR_INCORRECT_PASSWORD = 'ERR_INCORRECT_PASSWORD', // Некорректный старый пароль при попытке его изменить
+  ERR_INVALID_PASSWORD = 'ERR_INVALID_PASSWORD', // Пароль не соответствует регулярному выражению /^[\w-@{}()#$%^&*+=!~]{8,}$/
+  ERR_AUTH = 'ERR_AUTH', // Токен не прошел авторизацию
+  ERR_NO_FILES = 'ERR_NO_FILES', // Ошибка при загрузке файлов
+  ERR_NOT_ALLOWED = 'ERR_NOT_ALLOWED', // Нет доступа к данной операции (нельзя редактировать заказ другого пользователя)
+  ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR', // Не валидные данные
+  ERR_NOT_FOUND = 'ERR_NOT_FOUND', // Сущность не найдена
+  
+  ERR_DATA_BASE_ERROR = 'ERR_DATA_BASE_ERROR', // Обратитесь ко мне, этой ошибки быть не должно
 }
 ```

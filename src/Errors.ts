@@ -38,15 +38,7 @@ export class ServerError {
 }
 
 export class ServerErrors {
-  errors: {
-    extensions: {
-      code: ErrorCode;
-    };
-
-    name: string;
-    stack: string;
-    message: string;
-  }[];
+  errors: ServerError[];
 
   constructor(message: string | Error, code: ErrorCode, name: string, fieldName?: string) {
     const error = message instanceof Error ? message : new Error(message);

@@ -323,6 +323,7 @@ type Filters = {
   productIds?: string[];
   userId?: string;
   ids?: string[];
+  status?: OrderStatus;
 };
 ```
 

@@ -1,17 +1,28 @@
-import { OrderDocument } from '../../models/Order';
-import { Order } from '../../server.types';
+import { OrderDocument, OrderProductDocument } from '../../models/Order';
+import { Order, OrderProduct } from '../../server.types';
 import { ProductModel } from '../../models/Product';
-import { prepareProducts } from '../product/prepareProduct';
+import { prepareProduct } from '../product/prepareProduct';
 import { UserModel } from '../../models/User';
 import { prepareUser } from '../../utils/prepareUser';
 
+export const prepareOrderProducts = async (productRaws: OrderProductDocument[]): Promise<OrderProduct[]> => {
+  const result: OrderProduct[] = [];
+  for await (const productRaw of productRaws) {
+    result.push({
+      id: productRaw._id,
+      product: await prepareProduct(await ProductModel.findById(productRaw.id)),
+      quantity: productRaw.quantity,
+    });
+  }
+  return result;
+};
+
 export const prepareOrder = async (item: OrderDocument): Promise<Order> => {
   if (!item) return null;
-  const productDocs = await ProductModel.find({ _id: { $in: item.products.map((i) => i.id) } });
   const userDoc = await UserModel.findById(item.userId);
   return {
     id: item._id.toString(),
-    products: await prepareProducts(productDocs),
+    products: await prepareOrderProducts(item.products),
     status: item.status,
     user: prepareUser(userDoc),
     createdAt: item.createdAt,

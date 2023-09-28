@@ -183,9 +183,15 @@ export enum OrderStatus {
   OrderCancelled = 'order_cancelled',
 }
 
+export type OrderProduct = {
+  id: string;
+  product: Product;
+  quantity: number;
+};
+
 export type Order = {
   id: string;
-  products: Product[];
+  products: OrderProduct[];
   user: User;
   status: OrderStatus;
   createdAt: Date;

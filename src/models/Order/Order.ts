@@ -2,12 +2,8 @@ import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 import { Order, OrderStatus, ProductInput } from '../../server.types';
 
-export type OrderDocument = Document &
-  Omit<Order, 'id' | 'products' | 'user'> & {
-    products: ProductInput[];
-    userId: string;
-    commandId: string;
-  };
+export type OrderProductDocument = Document & ProductInput;
+
 export const OrderProduct = new mongoose.Schema<ProductInput>({
   id: {
     type: String,
@@ -18,6 +14,14 @@ export const OrderProduct = new mongoose.Schema<ProductInput>({
     required: true,
   },
 });
+
+export type OrderDocument = Document &
+  Omit<Order, 'id' | 'products' | 'user'> & {
+    products: OrderProductDocument[];
+    userId: string;
+    commandId: string;
+  };
+
 export const OrderSchema = new mongoose.Schema<OrderDocument>(
   {
     products: {

@@ -8,7 +8,7 @@ export const uploadRouter = Router();
 
 export const assetsPath = path.join(process.cwd(), 'src', 'assets');
 
-uploadRouter.post('/upload', function (req, res) {
+uploadRouter.post('/', function (req, res) {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).json(new NoFilesError('No files were uploaded'));
   }

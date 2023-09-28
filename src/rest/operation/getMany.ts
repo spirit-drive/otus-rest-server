@@ -15,7 +15,10 @@ export const getMany: RequestHandler<
   try {
     const { commandId } = (req.user || {}) as UserDocument;
     const { name, ids, pagination, sorting } = req.body;
-    const query = OperationModel.find({ commandId });
+    const query = OperationModel.find();
+    if (commandId) {
+      query.where('commandId', commandId);
+    }
     if (ids?.length) {
       query.where('_id', { $in: ids });
     }

@@ -9,7 +9,11 @@ export const get: RequestHandler<StandardParams, Product | ServerErrors> = async
   try {
     const { commandId } = (req.user || {}) as UserDocument;
     const { id } = req.params;
-    const entity = await ProductModel.findOne({ _id: id, commandId });
+    const query = ProductModel.findOne({ _id: id });
+    if (commandId) {
+      query.where('commandId', commandId);
+    }
+    const entity = await query;
 
     if (!entity) return res.status(404).json(new NotFoundError(`Product with id: "${id}" not found`));
     res.send(await prepareProduct(entity));

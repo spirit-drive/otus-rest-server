@@ -9,7 +9,11 @@ export const get: RequestHandler<StandardParams, Category | ServerErrors> = asyn
   try {
     const { commandId } = (req.user || {}) as UserDocument;
     const { id } = req.params;
-    const entity = await CategoryModel.findOne({ _id: id, commandId });
+    const query = CategoryModel.findOne({ _id: id });
+    if (commandId) {
+      query.where('commandId', commandId);
+    }
+    const entity = await query;
 
     if (!entity) return res.status(404).json(new NotFoundError(`Category with id: "${id}" not found`));
     res.send(await prepareCategory(entity));

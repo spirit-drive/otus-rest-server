@@ -9,7 +9,11 @@ export const get: RequestHandler<StandardParams, Operation | ServerErrors> = asy
   try {
     const { commandId } = (req.user || {}) as UserDocument;
     const { id } = req.params;
-    const entity = await OperationModel.findOne({ _id: id, commandId });
+    const query = OperationModel.findOne({ _id: id });
+    if (commandId) {
+      query.where('commandId', commandId);
+    }
+    const entity = await query;
 
     if (!entity) return res.status(404).json(new NotFoundError(`Operation with id: "${id}" not found`));
     res.send(await prepareOperation(entity));

@@ -14,7 +14,10 @@ export const getMany: RequestHandler<never, ResponseManyResult<Product[]> | Serv
   try {
     const { commandId } = (req.user || {}) as UserDocument;
     const { name, ids, sorting, pagination } = req.body;
-    const query = ProductModel.find({ commandId });
+    const query = ProductModel.find();
+    if (commandId) {
+      query.where('commandId', commandId);
+    }
     if (ids?.length) {
       query.where('_id', { $in: ids });
     }

@@ -6,15 +6,16 @@ import { create } from './create';
 import { remove } from './remove';
 
 export const productRouter = Router();
+export const protectedProductRouter = Router();
 
 productRouter.get('/', getMany);
 
-productRouter.post('/', create);
+protectedProductRouter.post('/', create);
 
-productRouter.delete('/:id', remove);
+protectedProductRouter.delete('/:id', remove);
 
 productRouter.get('/:id', get);
 
-productRouter.put('/:id', update());
+protectedProductRouter.put('/:id', update());
 
-productRouter.patch('/:id', update(true));
+protectedProductRouter.patch('/:id', update(true));

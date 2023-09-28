@@ -6,15 +6,16 @@ import { create } from './create';
 import { remove } from './remove';
 
 export const operationRouter = Router();
+export const protectedOperationRouter = Router();
 
 operationRouter.get('/', getMany);
 
-operationRouter.post('/', create);
+protectedOperationRouter.post('/', create);
 
-operationRouter.delete('/:id', remove);
+protectedOperationRouter.delete('/:id', remove);
 
 operationRouter.get('/:id', get);
 
-operationRouter.put('/:id', update());
+protectedOperationRouter.put('/:id', update());
 
-operationRouter.patch('/:id', update(true));
+protectedOperationRouter.patch('/:id', update(true));

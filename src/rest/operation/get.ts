@@ -11,7 +11,7 @@ export const get: RequestHandler<StandardParams, Operation | ServerErrors> = asy
     const { id } = req.params;
     const entity = await OperationModel.findOne({ _id: id, commandId });
 
-    if (!entity) return res.status(500).json(new NotFoundError(`Operation with id: "${id}" not found`));
+    if (!entity) return res.status(404).json(new NotFoundError(`Operation with id: "${id}" not found`));
     res.send(await prepareOperation(entity));
   } catch (e) {
     res.status(500).json(new DataBaseError(e));

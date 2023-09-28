@@ -14,7 +14,7 @@ export const update: (
       const { id } = req.params;
       const { commandId } = (req.user || {}) as UserDocument;
       const entity = await CategoryModel.findOne({ _id: id, commandId });
-      if (!entity) return res.status(500).json(new NotFoundError(`Category with id: "${id}" not found`));
+      if (!entity) return res.status(404).json(new NotFoundError(`Category with id: "${id}" not found`));
       updateModel(req.body, entity, ['name', 'photo'], patch);
 
       // Выполняем валидацию перед сохранением

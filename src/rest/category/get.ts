@@ -11,7 +11,7 @@ export const get: RequestHandler<StandardParams, Category | ServerErrors> = asyn
     const { id } = req.params;
     const entity = await CategoryModel.findOne({ _id: id, commandId });
 
-    if (!entity) return res.status(500).json(new NotFoundError(`Category with id: "${id}" not found`));
+    if (!entity) return res.status(404).json(new NotFoundError(`Category with id: "${id}" not found`));
     res.send(await prepareCategory(entity));
   } catch (e) {
     res.status(500).json(new DataBaseError(e));

@@ -15,7 +15,7 @@ export const update: (
       const { id } = req.params;
       const { commandId } = (req.user || {}) as UserDocument;
       const entity = await OperationModel.findOne({ _id: id, commandId });
-      if (!entity) return res.status(500).json(new NotFoundError(`Operation with id: "${id}" not found`));
+      if (!entity) return res.status(404).json(new NotFoundError(`Operation with id: "${id}" not found`));
       updateModel(req.body, entity, ['name', 'type', 'categoryId', 'desc', 'amount'], patch);
       if (!(await CategoryModel.findById(entity.categoryId))) {
         return res.status(400).json(new NotFoundError(`category not found`, 'categoryId'));

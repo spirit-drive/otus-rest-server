@@ -11,7 +11,7 @@ export const remove: RequestHandler<StandardParams, Order | ServerErrors> = asyn
     const { commandId } = (req.user || {}) as UserDocument;
     const entity = await OrderModel.findOneAndRemove({ _id: id, commandId });
 
-    if (!entity) return res.status(500).json(new NotFoundError(`Order with id: "${id}" not found`));
+    if (!entity) return res.status(404).json(new NotFoundError(`Order with id: "${id}" not found`));
     res.send(await prepareOrder(entity));
   } catch (e) {
     res.status(500).json(new DataBaseError(e));

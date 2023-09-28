@@ -11,7 +11,7 @@ export const get: RequestHandler<StandardParams, Product | ServerErrors> = async
     const { id } = req.params;
     const entity = await ProductModel.findOne({ _id: id, commandId });
 
-    if (!entity) return res.status(500).json(new NotFoundError(`Product with id: "${id}" not found`));
+    if (!entity) return res.status(404).json(new NotFoundError(`Product with id: "${id}" not found`));
     res.send(await prepareProduct(entity));
   } catch (e) {
     res.status(500).json(new DataBaseError(e));

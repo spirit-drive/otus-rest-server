@@ -17,7 +17,7 @@ export const update: (patch?: boolean) => RequestHandler<StandardParams, Order |
       }
 
       const entity = await OrderModel.findOne({ _id: id, commandId });
-      if (!entity) return res.status(500).json(new NotFoundError(`Order with id: "${id}" not found`));
+      if (!entity) return res.status(404).json(new NotFoundError(`Order with id: "${id}" not found`));
       updateModel(req.body, entity, ['products', 'userId', 'status'], patch);
 
       // Выполняем валидацию перед сохранением

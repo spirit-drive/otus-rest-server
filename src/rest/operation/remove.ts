@@ -11,7 +11,7 @@ export const remove: RequestHandler<StandardParams, Operation | ServerErrors> = 
     const { commandId } = (req.user || {}) as UserDocument;
     const entity = await OperationModel.findOneAndRemove({ _id: id, commandId });
 
-    if (!entity) return res.status(500).json(new NotFoundError(`Operation with id: "${id}" not found`));
+    if (!entity) return res.status(404).json(new NotFoundError(`Operation with id: "${id}" not found`));
     res.send(await prepareOperation(entity));
   } catch (e) {
     res.status(500).json(new DataBaseError(e));

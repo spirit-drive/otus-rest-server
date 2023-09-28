@@ -8,13 +8,16 @@ import { UserDocument } from '../../models/User';
 export const getMany: RequestHandler<never, Order[] | ServerErrors, OrderGetManyInput> = async (req, res) => {
   try {
     const { commandId } = (req.user || {}) as UserDocument;
-    const { ids, userId, productIds } = req.body;
+    const { ids, userId, productIds, status } = req.body;
     const query = OrderModel.find({ commandId });
     if (ids?.length) {
       query.where('_id', { $in: ids });
     }
     if (userId) {
       query.where('userId', userId);
+    }
+    if (status) {
+      query.where('status', status);
     }
     if (productIds?.length) {
       query.where('productIds').in(productIds);

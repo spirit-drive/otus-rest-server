@@ -87,6 +87,7 @@ export type OrderGetManyInput = {
   ids: string[];
   productIds: string[];
   userId: string;
+  status: OrderStatus;
 };
 
 export type StandardParams = { id: string };

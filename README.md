@@ -94,8 +94,8 @@ type Product = {
 #### Дополнительные типы
 ```ts
 export type Pagination = {
-  pageSize: number;
-  pageNumber: number;
+  pageSize?: number;
+  pageNumber?: number;
 };
 
 export type Sorting = {
@@ -215,8 +215,14 @@ type ChangePasswordResult = {
 type Filters = {
   name?: string;
   ids?: string[];
-  pagination?: Pagination;
-  sorting?: Sorting;
+  pagination?: {
+    pageSize?: number;
+    pageNumber?: number;
+  };
+  sorting?: {
+    type: 'ASC' | 'DESC';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+  };
 };
 ```
 
@@ -292,8 +298,14 @@ type Params = {
 type Filters = {
   name?: string;
   ids?: string[];
-  pagination?: Pagination;
-  sorting?: Sorting;
+  pagination?: {
+    pageSize?: number;
+    pageNumber?: number;
+  };
+  sorting?: {
+    type: 'ASC' | 'DESC';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+  };
 };
 ```
 
@@ -383,8 +395,14 @@ type Filters = {
   userId?: string;
   ids?: string[];
   status?: OrderStatus;
-  pagination?: Pagination;
-  sorting?: Sorting;
+  pagination?: {
+    pageSize?: number;
+    pageNumber?: number;
+  };
+  sorting?: {
+    type: 'ASC' | 'DESC';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+  };
 };
 ```
 
@@ -464,8 +482,14 @@ type Params = {
 type Filters = {
   name?: string;
   ids?: string[];
-  pagination?: Pagination;
-  sorting?: Sorting;
+  pagination?: {
+    pageSize?: number;
+    pageNumber?: number;
+  };
+  sorting?: {
+    type: 'ASC' | 'DESC';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+  };
 };
 ```
 

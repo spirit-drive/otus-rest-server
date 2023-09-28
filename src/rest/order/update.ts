@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OrderModel } from '../../models/Order';
 import { prepareOrder } from './prepareOrder';
-import { DataBaseError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
+import { DataBaseError, ValidationError, ServerErrors, NotFoundError, NotAllowedError } from '../../Errors';
 import { Order, OrderUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 import { UserDocument } from '../../models/User';
@@ -11,13 +11,17 @@ export const update: (patch?: boolean) => RequestHandler<StandardParams, Order |
   (patch?: boolean) => async (req, res) => {
     try {
       const { id } = req.params;
-      const { commandId } = (req.user || {}) as UserDocument;
-      if (!(await isExistProducts(req.body.products.map((i) => i.id)))) {
+      const { commandId, id: userId } = (req.user || {}) as UserDocument;
+      if (req.body.products && !(await isExistProducts(req.body.products.map((i) => i.id)))) {
         return res.status(400).json(new NotFoundError(`not all products found`, 'products'));
       }
 
       const entity = await OrderModel.findOne({ _id: id, commandId });
       if (!entity) return res.status(404).json(new NotFoundError(`Order with id: "${id}" not found`));
+      if (entity.userId !== userId) {
+        return res.status(403).json(new NotAllowedError(`The order can only be edited by the creator`));
+      }
+
       updateModel(req.body, entity, ['products', 'userId', 'status'], patch);
 
       // Выполняем валидацию перед сохранением

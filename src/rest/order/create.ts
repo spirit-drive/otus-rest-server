@@ -4,7 +4,6 @@ import { prepareOrder } from './prepareOrder';
 import { DataBaseError, ValidationError, ServerErrors, FieldRequiredError, NotFoundError } from '../../Errors';
 import { Order, OrderAddInput } from '../../server.types';
 import { UserDocument, UserModel } from '../../models/User';
-import { ProductModel } from '../../models/Product';
 import { isExistProducts } from './helpers';
 
 export const create: RequestHandler<never, Order | ServerErrors, OrderAddInput> = async (req, res) => {

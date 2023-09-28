@@ -216,20 +216,18 @@ type Filters = {
 Возвращает
 
 ```ts
-[
-  {
-    data: Category[];
-    pagination: {
-      pageSize: number;
-      pageNumber: number;
-      total: number;
-    };
-    sorting: {
-      type: 'ASC' | 'DESC';
-      field: 'id' | 'createdAt' | 'updatedAt' | 'name';
-    }
+{
+  data: Category[];
+  pagination: {
+    pageSize: number;
+    pageNumber: number;
+    total: number;
+  };
+  sorting: {
+    type: 'ASC' | 'DESC';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
   }
-]
+}
 ```
 
 ##### /categories POST **PROTECTED**
@@ -295,20 +293,18 @@ type Filters = {
 Возвращает 
 
 ```ts
-[
-  {
-    data: Product[];
-    pagination: {
-      pageSize: number;
-      pageNumber: number;
-      total: number;
-    };
-    sorting: {
-      type: 'ASC' | 'DESC';
-      field: 'id' | 'createdAt' | 'updatedAt' | 'name';
-    }
+{
+  data: Product[];
+  pagination: {
+    pageSize: number;
+    pageNumber: number;
+    total: number;
+  };
+  sorting: {
+    type: 'ASC' | 'DESC';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
   }
-]
+}
 ```
 
 ##### /products POST **PROTECTED**
@@ -388,20 +384,18 @@ type Filters = {
 Возвращает
 
 ```ts
-[
-  {
-    data: Order[];
-    pagination: {
-      pageSize: number;
-      pageNumber: number;
-      total: number;
-    };
-    sorting: {
-      type: 'ASC' | 'DESC';
-      field: 'id' | 'createdAt' | 'updatedAt' | 'name';
-    }
+{
+  data: Order[];
+  pagination: {
+    pageSize: number;
+    pageNumber: number;
+    total: number;
+  };
+  sorting: {
+    type: 'ASC' | 'DESC';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
   }
-]
+}
 ```
 
 ##### /orders POST **PROTECTED**
@@ -471,20 +465,18 @@ type Filters = {
 Возвращает 
 
 ```ts
-[
-  {
-    data: Operation[];
-    pagination: {
-      pageSize: number;
-      pageNumber: number;
-      total: number;
-    };
-    sorting: {
-      type: 'ASC' | 'DESC';
-      field: 'id' | 'createdAt' | 'updatedAt' | 'name';
-    }
+{
+  data: Operation[];
+  pagination: {
+    pageSize: number;
+    pageNumber: number;
+    total: number;
+  };
+  sorting: {
+    type: 'ASC' | 'DESC';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
   }
-]
+}
 ```
 
 ##### /operations POST **PROTECTED**

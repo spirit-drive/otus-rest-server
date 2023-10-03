@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OrderModel } from '../../models/Order';
 import { prepareOrder } from './prepareOrder';
-import { DataBaseError, NotFoundError, ServerErrors } from '../../Errors';
+import { InternalServerError, NotFoundError, ServerErrors } from '../../Errors';
 import { Order, StandardParams } from '../../server.types';
 import { UserDocument } from '../../models/User';
 
@@ -18,6 +18,6 @@ export const get: RequestHandler<StandardParams, Order | ServerErrors> = async (
     if (!entity) return res.status(404).json(new NotFoundError(`Order with id: "${id}" not found`));
     res.send(await prepareOrder(entity));
   } catch (e) {
-    res.status(500).json(new DataBaseError(e));
+    res.status(500).json(new InternalServerError(e));
   }
 };

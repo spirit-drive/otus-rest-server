@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OperationModel } from '../../models/Operation';
 import { prepareOperation } from './prepareOperation';
-import { DataBaseError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
+import { InternalServerError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
 import { Operation, OperationUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 import { CategoryModel } from '../../models/Category';
@@ -31,6 +31,6 @@ export const update: (
       await entity.save();
       res.send(await prepareOperation(entity));
     } catch (e) {
-      res.status(500).json(new DataBaseError(e));
+      res.status(500).json(new InternalServerError(e));
     }
   };

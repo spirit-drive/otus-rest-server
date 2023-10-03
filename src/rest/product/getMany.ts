@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { ProductModel } from '../../models/Product';
 import { prepareProducts } from './prepareProduct';
-import { DataBaseError, ServerErrors } from '../../Errors';
+import { InternalServerError, ServerErrors } from '../../Errors';
 import { Product, ProductGetManyInput, ResponseManyResult, SortField } from '../../server.types';
 import { UserDocument } from '../../models/User';
 import { setSortingAndPagination } from '../../utils/setSortingAndPagination';
@@ -13,10 +13,28 @@ export const getMany: RequestHandler<never, ResponseManyResult<Product[]> | Serv
 ) => {
   try {
     const { commandId } = (req.user || {}) as UserDocument;
-    const { name, ids, sorting, pagination } = req.body;
+    const { name, ids, sorting, pagination, createdAt, updatedAt } = req.body;
     const query = ProductModel.find();
     if (commandId) {
       query.where('commandId', commandId);
+    }
+    if (createdAt && (createdAt.gte || createdAt.lte)) {
+      query.where('createdAt');
+      if (createdAt.gte) {
+        query.gte(new Date(createdAt.gte).getTime());
+      }
+      if (createdAt.lte) {
+        query.lte(new Date(createdAt.lte).getTime());
+      }
+    }
+    if (updatedAt && (updatedAt.gte || updatedAt.lte)) {
+      query.where('updatedAt');
+      if (updatedAt.gte) {
+        query.gte(new Date(updatedAt.gte).getTime());
+      }
+      if (updatedAt.lte) {
+        query.lte(new Date(updatedAt.lte).getTime());
+      }
     }
     if (ids?.length) {
       query.where('_id', { $in: ids });
@@ -43,6 +61,6 @@ export const getMany: RequestHandler<never, ResponseManyResult<Product[]> | Serv
       )
     );
   } catch (e) {
-    res.status(500).json(new DataBaseError(e));
+    res.status(500).json(new InternalServerError(e));
   }
 };

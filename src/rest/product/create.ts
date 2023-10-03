@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { ProductModel } from '../../models/Product';
 import { prepareProduct } from './prepareProduct';
-import { DataBaseError, ValidationError, ServerErrors, FieldRequiredError, NotFoundError } from '../../Errors';
+import { InternalServerError, ValidationError, ServerErrors, FieldRequiredError, NotFoundError } from '../../Errors';
 import { Product, ProductAddInput } from '../../server.types';
 import { CategoryModel } from '../../models/Category';
 import { UserDocument } from '../../models/User';
@@ -26,6 +26,6 @@ export const create: RequestHandler<never, Product | ServerErrors, ProductAddInp
     await entity.save();
     res.send(await prepareProduct(entity));
   } catch (e) {
-    res.status(500).json(new DataBaseError(e));
+    res.status(500).json(new InternalServerError(e));
   }
 };

@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { CategoryModel } from '../../models/Category';
 import { prepareCategory } from './prepareCategory';
-import { DataBaseError, NotFoundError, ServerErrors } from '../../Errors';
+import { InternalServerError, NotFoundError, ServerErrors } from '../../Errors';
 import { Category, StandardParams } from '../../server.types';
 import { UserDocument } from '../../models/User';
 
@@ -14,6 +14,6 @@ export const remove: RequestHandler<StandardParams, Category | ServerErrors> = a
     if (!entity) return res.status(404).json(new NotFoundError(`Category with id: "${id}" not found`));
     res.send(await prepareCategory(entity));
   } catch (e) {
-    res.status(500).json(new DataBaseError(e));
+    res.status(500).json(new InternalServerError(e));
   }
 };

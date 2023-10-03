@@ -33,7 +33,7 @@ type Order = {
 };
 
 type OrderProduct = {
-  id: string;
+  _id: string; // служебный id - это не id продукта
   product: Product;
   quantity: number;
 }
@@ -219,6 +219,14 @@ type Filters = {
     pageSize?: number;
     pageNumber?: number;
   };
+  createdAt?: {
+    gte?: string; // от - дата в виде строки
+    lte?: string; // до - дата в виде строки
+  }
+  updatedAt?: {
+    gte?: string; // от - дата в виде строки
+    lte?: string; // до - дата в виде строки
+  }
   sorting?: {
     type: 'ASC' | 'DESC';
     field: 'id' | 'createdAt' | 'updatedAt' | 'name';
@@ -302,6 +310,14 @@ type Filters = {
     pageSize?: number;
     pageNumber?: number;
   };
+  createdAt?: {
+    gte?: string; // от - дата в виде строки
+    lte?: string; // до - дата в виде строки
+  }
+  updatedAt?: {
+    gte?: string; // от - дата в виде строки
+    lte?: string; // до - дата в виде строки
+  }
   sorting?: {
     type: 'ASC' | 'DESC';
     field: 'id' | 'createdAt' | 'updatedAt' | 'name';
@@ -399,6 +415,14 @@ type Filters = {
     pageSize?: number;
     pageNumber?: number;
   };
+  createdAt?: {
+    gte?: string; // от - дата в виде строки
+    lte?: string; // до - дата в виде строки
+  }
+  updatedAt?: {
+    gte?: string; // от - дата в виде строки
+    lte?: string; // до - дата в виде строки
+  }
   sorting?: {
     type: 'ASC' | 'DESC';
     field: 'id' | 'createdAt' | 'updatedAt' | 'name';
@@ -431,7 +455,6 @@ type Filters = {
 ```ts
 type Params = {
   productIds: string[];
-  userId: string; // Кто сделал заказ
   status?: OrderStatus;
 };
 ```
@@ -451,7 +474,6 @@ type Params = {
 ```ts
 type Params = {
   productIds: string[];
-  userId: string; // Кто сделал заказ
   status: OrderStatus;
 };
 ```
@@ -466,7 +488,6 @@ type Params = {
 ```ts
 type Params = {
   productIds?: string[];
-  userId?: string; // Кто сделал заказ
   status?: OrderStatus;
 };
 ```
@@ -480,12 +501,21 @@ type Params = {
 Параметры
 ```ts
 type Filters = {
-  name?: string;
   ids?: string[];
+  name?: string;
+  type?: 'Cost' | 'Profit';
   pagination?: {
     pageSize?: number;
     pageNumber?: number;
   };
+  createdAt?: {
+    gte?: string; // от - дата в виде строки
+    lte?: string; // до - дата в виде строки
+  }
+  updatedAt?: {
+    gte?: string; // от - дата в виде строки
+    lte?: string; // до - дата в виде строки
+  }
   sorting?: {
     type: 'ASC' | 'DESC';
     field: 'id' | 'createdAt' | 'updatedAt' | 'name';
@@ -657,7 +687,7 @@ type ServerErrors = {
     };
 
     name: string;
-    fieldName?: string; // Существует при ошибке с кодом ERR_FIELD_REQUIRED
+    fieldName?: string;
     stack: string;
     message: string;
   }[];
@@ -669,12 +699,13 @@ enum ErrorCode {
   ERR_FIELD_REQUIRED = 'ERR_FIELD_REQUIRED', // Обязательное поле. В ошибке будет дополнительное поле fieldName с указанием, какое конкретно поле обязательно
   ERR_INCORRECT_PASSWORD = 'ERR_INCORRECT_PASSWORD', // Некорректный старый пароль при попытке его изменить
   ERR_INVALID_PASSWORD = 'ERR_INVALID_PASSWORD', // Пароль не соответствует регулярному выражению /^[\w-@{}()#$%^&*+=!~]{8,}$/
+  ERR_NOT_VALID = 'ERR_NOT_VALID', // Не валидный id сущности
   ERR_AUTH = 'ERR_AUTH', // Токен не передан, либо не прошел авторизацию
   ERR_NO_FILES = 'ERR_NO_FILES', // Ошибка при загрузке файлов
   ERR_NOT_ALLOWED = 'ERR_NOT_ALLOWED', // Нет доступа к данной операции (нельзя редактировать заказ другого пользователя)
   ERR_NOT_FOUND = 'ERR_NOT_FOUND', // Сущность не найдена
   ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR', // Не валидные данные, например, не указано name
   
-  ERR_DATA_BASE_ERROR = 'ERR_DATA_BASE_ERROR', // Обратитесь ко мне, этой ошибки быть не должно
+  ERR_INTERNAL_SERVER = 'ERR_INTERNAL_SERVER', // Серверная ошибка. Обратитесь ко мне, этой ошибки быть не должно
 }
 ```

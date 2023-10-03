@@ -1,26 +1,34 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OrderModel } from '../../models/Order';
 import { prepareOrder } from './prepareOrder';
-import { DataBaseError, ValidationError, ServerErrors, FieldRequiredError, NotFoundError } from '../../Errors';
+import {
+  InternalServerError,
+  ValidationError,
+  ServerErrors,
+  FieldRequiredError,
+  NotFoundError,
+  NotValidIdError,
+} from '../../Errors';
 import { Order, OrderAddInput } from '../../server.types';
-import { UserDocument, UserModel } from '../../models/User';
+import { UserDocument } from '../../models/User';
 import { isExistProducts } from './helpers';
+import { Types } from 'mongoose';
+
+const { ObjectId } = Types;
 
 export const create: RequestHandler<never, Order | ServerErrors, OrderAddInput> = async (req, res) => {
   try {
-    if (!req.body.userId) {
-      return res.status(400).json(new FieldRequiredError(`userId is required`, 'userId'));
-    }
     if (!req.body.products?.length) {
       return res.status(400).json(new FieldRequiredError(`productIds is required`, 'products'));
     }
-    if (!(await UserModel.findById(req.body.userId))) {
-      return res.status(400).json(new NotFoundError(`user not found`, 'userId'));
+    if (req.body.products.some((i) => !ObjectId.isValid(i.id))) {
+      return res.status(400).json(new NotValidIdError(`not all product ids are valid`, 'products'));
     }
     if (!(await isExistProducts(req.body.products.map((i) => i.id)))) {
       return res.status(400).json(new NotFoundError(`not all products found`, 'products'));
     }
-    const entity = new OrderModel({ ...req.body, commandId: (req.user as UserDocument)?.commandId });
+    const user = req.user as UserDocument;
+    const entity = new OrderModel({ ...req.body, userId: user._id, commandId: user?.commandId });
 
     // Выполняем валидацию перед сохранением
     const validationError = entity.validateSync();
@@ -32,6 +40,6 @@ export const create: RequestHandler<never, Order | ServerErrors, OrderAddInput> 
     await entity.save();
     res.send(await prepareOrder(entity));
   } catch (e) {
-    res.status(500).json(new DataBaseError(e));
+    res.status(500).json(new InternalServerError(e));
   }
 };

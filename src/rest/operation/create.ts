@@ -1,13 +1,26 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OperationModel } from '../../models/Operation';
 import { prepareOperation } from './prepareOperation';
-import { DataBaseError, ValidationError, ServerErrors, FieldRequiredError, NotFoundError } from '../../Errors';
+import {
+  InternalServerError,
+  ValidationError,
+  ServerErrors,
+  FieldRequiredError,
+  NotFoundError,
+  NotValidIdError,
+} from '../../Errors';
 import { Operation, OperationAddInput } from '../../server.types';
 import { CategoryModel } from '../../models/Category';
 import { UserDocument } from '../../models/User';
+import { Types } from 'mongoose';
+
+const { ObjectId } = Types;
 
 export const create: RequestHandler<never, Operation | ServerErrors, OperationAddInput> = async (req, res) => {
   try {
+    if (!ObjectId.isValid(req.body.categoryId)) {
+      return res.status(400).json(new NotValidIdError(`categoryId is not valid`, 'categoryId'));
+    }
     if (!req.body.categoryId) {
       return res.status(400).json(new FieldRequiredError(`categoryId is required`, 'categoryId'));
     }
@@ -26,6 +39,6 @@ export const create: RequestHandler<never, Operation | ServerErrors, OperationAd
     await entity.save();
     res.send(await prepareOperation(entity));
   } catch (e) {
-    res.status(500).json(new DataBaseError(e));
+    res.status(500).json(new InternalServerError(e));
   }
 };

@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { AuthResult, SignUpBody } from '../../server.types';
 import { UserDocument, UserModel } from '../../models/User';
-import { AccountAlreadyExistError, DataBaseError, ValidationError, ServerErrors } from '../../Errors';
+import { AccountAlreadyExistError, InternalServerError, ValidationError, ServerErrors } from '../../Errors';
 import { sign } from '../../utils/jwt';
 
 export const signup: RequestHandler<never, AuthResult | ServerErrors, SignUpBody> = async (req, res) => {
@@ -11,7 +11,7 @@ export const signup: RequestHandler<never, AuthResult | ServerErrors, SignUpBody
   try {
     foundUsers = (await UserModel.findOne({ email })) as UserDocument;
   } catch (e) {
-    return res.status(400).json(new DataBaseError(e));
+    return res.status(400).json(new InternalServerError(e));
   }
   if (foundUsers) {
     return res.status(400).json(new AccountAlreadyExistError(`User with email: ${foundUsers.email} already exist`));
@@ -30,7 +30,7 @@ export const signup: RequestHandler<never, AuthResult | ServerErrors, SignUpBody
   try {
     await user.save();
   } catch (e) {
-    return res.status(400).json(new DataBaseError(e));
+    return res.status(400).json(new InternalServerError(e));
   }
 
   const token = sign({ id: user._id });

@@ -4,13 +4,14 @@ enum ErrorCode {
   ERR_INCORRECT_EMAIL_OR_PASSWORD = 'ERR_INCORRECT_EMAIL_OR_PASSWORD',
   ERR_NOT_FOUND = 'ERR_NOT_FOUND',
   ERR_FIELD_REQUIRED = 'ERR_FIELD_REQUIRED',
+  ERR_NOT_VALID = 'ERR_NOT_VALID',
   ERR_INCORRECT_PASSWORD = 'ERR_INCORRECT_PASSWORD',
   ERR_ACCOUNT_ALREADY_EXIST = 'ERR_ACCOUNT_ALREADY_EXIST',
   ERR_INVALID_PASSWORD = 'ERR_INVALID_PASSWORD',
   ERR_AUTH = 'ERR_AUTH',
   ERR_NO_FILES = 'ERR_NO_FILES',
   ERR_NOT_ALLOWED = 'ERR_NOT_ALLOWED',
-  ERR_DATA_BASE_ERROR = 'ERR_DATA_BASE_ERROR',
+  ERR_INTERNAL_SERVER = 'ERR_INTERNAL_SERVER',
   ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR',
 }
 
@@ -54,9 +55,9 @@ export class ServerErrors {
   }
 }
 
-export class DataBaseError extends ServerErrors {
+export class InternalServerError extends ServerErrors {
   constructor(message: string | Error, fieldName?: string) {
-    super(message, ErrorCode.ERR_DATA_BASE_ERROR, 'DataBaseError', fieldName);
+    super(message, ErrorCode.ERR_INTERNAL_SERVER, 'InternalServerError', fieldName);
   }
 }
 
@@ -104,6 +105,11 @@ export class NotFoundError extends ServerErrors {
 export class FieldRequiredError extends ServerErrors {
   constructor(message: string | Error, fieldName?: string) {
     super(message, ErrorCode.ERR_FIELD_REQUIRED, 'FieldRequiredError', fieldName);
+  }
+}
+export class NotValidIdError extends ServerErrors {
+  constructor(message: string | Error, fieldName?: string) {
+    super(message, ErrorCode.ERR_NOT_VALID, 'NotValidIdError', fieldName);
   }
 }
 export class NotAllowedError extends ServerErrors {

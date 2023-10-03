@@ -2,7 +2,7 @@ import { RequestHandler } from 'express-serve-static-core';
 import { ChangePasswordBody, ChangePasswordResult } from '../../server.types';
 import { UserDocument } from '../../models/User';
 import { isValidPassword } from '../../models/User/helpers';
-import { DataBaseError, IncorrectPasswordError, InvalidPasswordError, ServerErrors } from '../../Errors';
+import { InternalServerError, IncorrectPasswordError, InvalidPasswordError, ServerErrors } from '../../Errors';
 
 export const changePassword: RequestHandler<never, ChangePasswordResult | ServerErrors, ChangePasswordBody> = async (
   req,
@@ -23,7 +23,7 @@ export const changePassword: RequestHandler<never, ChangePasswordResult | Server
   try {
     await user.save();
   } catch (e) {
-    return res.status(500).json(new DataBaseError(e));
+    return res.status(500).json(new InternalServerError(e));
   }
 
   res.send({ success: true });

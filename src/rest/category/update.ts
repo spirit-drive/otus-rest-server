@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { CategoryModel } from '../../models/Category';
 import { prepareCategory } from './prepareCategory';
-import { DataBaseError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
+import { InternalServerError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
 import { Category, CategoryUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 import { UserDocument } from '../../models/User';
@@ -27,6 +27,6 @@ export const update: (
       await entity.save();
       res.send(await prepareCategory(entity));
     } catch (e) {
-      res.status(500).json(new DataBaseError(e));
+      res.status(500).json(new InternalServerError(e));
     }
   };

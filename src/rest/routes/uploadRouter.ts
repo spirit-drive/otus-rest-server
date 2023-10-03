@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import * as path from 'path';
 import * as fs from 'fs';
-import { DataBaseError, NoFilesError } from '../../Errors';
+import { InternalServerError, NoFilesError } from '../../Errors';
 import * as config from '../../config.json';
 export const uploadRouter = Router();
 
@@ -20,7 +20,7 @@ uploadRouter.post('/', function (req, res) {
   const uploadPath = path.join(assetsPath, name);
 
   file.mv(uploadPath, function (err) {
-    if (err) return res.status(500).json(new DataBaseError(err));
+    if (err) return res.status(500).json(new InternalServerError(err));
     res.send({ url: `${config.url}/img/${name}` });
   });
 });

@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { ProductModel } from '../../models/Product';
 import { prepareProduct } from './prepareProduct';
-import { DataBaseError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
+import { InternalServerError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
 import { Product, ProductUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 import { CategoryModel } from '../../models/Category';
@@ -29,6 +29,6 @@ export const update: (patch?: boolean) => RequestHandler<StandardParams, Product
       await entity.save();
       res.send(await prepareProduct(entity));
     } catch (e) {
-      res.status(500).json(new DataBaseError(e));
+      res.status(500).json(new InternalServerError(e));
     }
   };

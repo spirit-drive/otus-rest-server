@@ -80,6 +80,8 @@ export type CategoryGetManyInput = Pick<Category, 'name'> & {
   ids?: string[];
   pagination?: Pagination;
   sorting?: Sorting;
+  createdAt?: DateRange;
+  updatedAt?: DateRange;
 };
 
 export type ProductAddInput = Omit<Product, 'id' | 'createdAt' | 'category' | 'updatedAt'> & {
@@ -94,6 +96,8 @@ export type ProductGetManyInput = Pick<Product, 'name'> & {
   ids?: string[];
   pagination?: Pagination;
   sorting?: Sorting;
+  createdAt?: DateRange;
+  updatedAt?: DateRange;
 };
 
 export type OperationAddInput = Omit<Operation, 'id' | 'createdAt' | 'category' | 'updatedAt'> & {
@@ -104,10 +108,13 @@ export type OperationUpdateInput = Omit<Operation, 'id' | 'createdAt' | 'categor
   categoryId: string;
 };
 
-export type OperationGetManyInput = Pick<Operation, 'name'> & {
+export type OperationGetManyInput = Pick<Operation, 'name' | 'type'> & {
   ids?: string[];
   pagination?: Pagination;
   sorting?: Sorting;
+  type?: 'Cost' | 'Profit';
+  createdAt?: DateRange;
+  updatedAt?: DateRange;
 };
 
 export type ProductInput = {
@@ -117,12 +124,10 @@ export type ProductInput = {
 
 export type OrderAddInput = Omit<Order, 'id' | 'createdAt' | 'products' | 'user' | 'updatedAt'> & {
   products: ProductInput[];
-  userId: string;
 };
 
 export type OrderUpdateInput = Omit<Order, 'id' | 'createdAt' | 'products' | 'user' | 'updatedAt'> & {
   products: ProductInput[];
-  userId: string;
 };
 
 export type OrderGetManyInput = {
@@ -132,6 +137,8 @@ export type OrderGetManyInput = {
   status?: OrderStatus;
   pagination?: Pagination;
   sorting?: Sorting;
+  createdAt?: DateRange;
+  updatedAt?: DateRange;
 };
 
 export type StandardParams = { id: string };
@@ -184,7 +191,7 @@ export enum OrderStatus {
 }
 
 export type OrderProduct = {
-  id: string;
+  _id: string;
   product: Product;
   quantity: number;
 };
@@ -196,4 +203,9 @@ export type Order = {
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type DateRange = {
+  gte?: string;
+  lte?: string;
 };

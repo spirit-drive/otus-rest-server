@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OrderModel } from '../../models/Order';
 import { prepareOrder } from './prepareOrder';
-import { DataBaseError, NotAllowedError, NotFoundError, ServerErrors } from '../../Errors';
+import { InternalServerError, NotAllowedError, NotFoundError, ServerErrors } from '../../Errors';
 import { Order, StandardParams } from '../../server.types';
 import { UserDocument } from '../../models/User';
 
@@ -17,6 +17,6 @@ export const remove: RequestHandler<StandardParams, Order | ServerErrors> = asyn
     }
     res.send(await prepareOrder(entity));
   } catch (e) {
-    res.status(500).json(new DataBaseError(e));
+    res.status(500).json(new InternalServerError(e));
   }
 };

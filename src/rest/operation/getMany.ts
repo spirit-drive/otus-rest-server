@@ -1,11 +1,12 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OperationModel } from '../../models/Operation';
 import { prepareOperations } from './prepareOperation';
-import { InternalServerError, ServerErrors } from '../../Errors';
+import { InternalServerError, InvalidQueryParamsError, ServerErrors } from '../../Errors';
 import { Operation, OperationGetManyInput, ResponseManyResult, SortField } from '../../server.types';
 import { UserDocument } from '../../models/User';
 import { setSortingAndPagination } from '../../utils/setSortingAndPagination';
 import { getManyResponse } from '../../utils/getManyResponse';
+import { parseQuery } from '../../utils/parseQuery';
 
 export const getMany: RequestHandler<
   never,
@@ -14,7 +15,14 @@ export const getMany: RequestHandler<
 > = async (req, res) => {
   try {
     const { commandId } = (req.user || {}) as UserDocument;
-    const { name, ids, pagination, sorting, type, createdAt, updatedAt } = req.body;
+    let params;
+    try {
+      params = parseQuery<OperationGetManyInput>(req.query);
+    } catch (e) {
+      return res.status(400).json(new InvalidQueryParamsError(e));
+    }
+    const { name, ids, pagination, sorting, type, createdAt, updatedAt } = params;
+
     const query = OperationModel.find();
     if (commandId) {
       query.where('commandId', commandId);

@@ -1,20 +1,23 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { CategoryModel } from '../../models/Category';
 import { prepareCategories } from './prepareCategory';
-import { InternalServerError, ServerErrors } from '../../Errors';
+import { InternalServerError, InvalidQueryParamsError, ServerErrors } from '../../Errors';
 import { Category, CategoryGetManyInput, ResponseManyResult, SortField } from '../../server.types';
 import { UserDocument } from '../../models/User';
 import { setSortingAndPagination } from '../../utils/setSortingAndPagination';
 import { getManyResponse } from '../../utils/getManyResponse';
+import { parseQuery } from '../../utils/parseQuery';
 
-export const getMany: RequestHandler<
-  never,
-  ResponseManyResult<Category[]> | ServerErrors,
-  CategoryGetManyInput
-> = async (req, res) => {
+export const getMany: RequestHandler<never, ResponseManyResult<Category[]> | ServerErrors> = async (req, res) => {
   try {
     const { commandId } = (req.user || {}) as UserDocument;
-    const { name, ids, sorting, pagination, createdAt, updatedAt } = req.body;
+    let params;
+    try {
+      params = parseQuery<CategoryGetManyInput>(req.query);
+    } catch (e) {
+      return res.status(400).json(new InvalidQueryParamsError(e));
+    }
+    const { name, ids, sorting, pagination, createdAt, updatedAt } = params;
     const query = CategoryModel.find();
     if (commandId) {
       query.where('commandId', commandId);

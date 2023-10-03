@@ -12,6 +12,7 @@ enum ErrorCode {
   ERR_NO_FILES = 'ERR_NO_FILES',
   ERR_NOT_ALLOWED = 'ERR_NOT_ALLOWED',
   ERR_INTERNAL_SERVER = 'ERR_INTERNAL_SERVER',
+  ERR_INVALID_QUERY_PARAMS = 'ERR_INVALID_QUERY_PARAMS',
   ERR_VALIDATION_ERROR = 'ERR_VALIDATION_ERROR',
 }
 
@@ -120,5 +121,18 @@ export class NotAllowedError extends ServerErrors {
 export class NoFilesError extends ServerErrors {
   constructor(message: string | Error, fieldName?: string) {
     super(message, ErrorCode.ERR_NO_FILES, 'NoFilesError', fieldName);
+  }
+}
+export class InvalidQueryParamsError extends ServerErrors {
+  constructor(message: string | Error) {
+    const key =
+      message && typeof message === 'object' && 'key' in message
+        ? (message as unknown as { key: string }).key
+        : undefined;
+    super(
+      Object.assign(message, { message: `"${key}" value is not valid json` }),
+      ErrorCode.ERR_INVALID_QUERY_PARAMS,
+      'InvalidQueryParamsError'
+    );
   }
 }

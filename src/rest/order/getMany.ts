@@ -1,19 +1,23 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OrderModel } from '../../models/Order';
 import { prepareOrders } from './prepareOrder';
-import { InternalServerError, ServerErrors } from '../../Errors';
+import { InternalServerError, InvalidQueryParamsError, ServerErrors } from '../../Errors';
 import { Order, OrderGetManyInput, ResponseManyResult, SortField } from '../../server.types';
 import { UserDocument } from '../../models/User';
 import { setSortingAndPagination } from '../../utils/setSortingAndPagination';
 import { getManyResponse } from '../../utils/getManyResponse';
+import { parseQuery } from '../../utils/parseQuery';
 
-export const getMany: RequestHandler<never, ResponseManyResult<Order[]> | ServerErrors, OrderGetManyInput> = async (
-  req,
-  res
-) => {
+export const getMany: RequestHandler<never, ResponseManyResult<Order[]> | ServerErrors> = async (req, res) => {
   try {
     const { commandId } = (req.user || {}) as UserDocument;
-    const { ids, userId, productIds, status, sorting, pagination, createdAt, updatedAt } = req.body;
+    let params;
+    try {
+      params = parseQuery<OrderGetManyInput>(req.query);
+    } catch (e) {
+      return res.status(400).json(new InvalidQueryParamsError(e));
+    }
+    const { ids, userId, productIds, status, sorting, pagination, createdAt, updatedAt } = params;
     const query = OrderModel.find();
     if (commandId) {
       query.where('commandId', commandId);

@@ -505,7 +505,10 @@ fetch(
 
 ```ts
 type Params = {
-  productIds: string[];
+  products: Array<{
+    id: string;
+    quantity: number;
+  }>;
   status?: OrderStatus;
 };
 ```

@@ -21,11 +21,20 @@ export const getMany: RequestHandler<
     } catch (e) {
       return res.status(400).json(new InvalidQueryParamsError(e));
     }
-    const { name, ids, pagination, sorting, type, createdAt, updatedAt } = params;
+    const { name, ids, pagination, sorting, type, createdAt, date, updatedAt } = params;
 
     const query = OperationModel.find();
     if (commandId) {
       query.where('commandId', commandId);
+    }
+    if (date && (date.gte || date.lte)) {
+      query.where('date');
+      if (date.gte) {
+        query.gte(new Date(date.gte).getTime());
+      }
+      if (date.lte) {
+        query.lte(new Date(date.lte).getTime());
+      }
     }
     if (createdAt && (createdAt.gte || createdAt.lte)) {
       query.where('createdAt');

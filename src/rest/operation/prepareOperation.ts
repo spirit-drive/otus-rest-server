@@ -10,6 +10,7 @@ export const prepareOperation = async (item: OperationDocument): Promise<Operati
     id: item._id.toString(),
     name: item.name,
     desc: item.desc,
+    date: item.date,
     createdAt: item.createdAt,
     updatedAt: item.updatedAt,
     type: item.type,

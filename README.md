@@ -562,6 +562,10 @@ type Filters = {
     pageSize?: number;
     pageNumber?: number;
   };
+  date?: {
+    gte?: string; // от - дата в виде строки new Date().toISOString() 2023-09-19T10:37:16.389+00:00
+    lte?: string; // до - дата в виде строки new Date().toISOString() 2023-09-19T10:37:16.389+00:00
+  }
   createdAt?: {
     gte?: string; // от - дата в виде строки new Date().toISOString() 2023-09-19T10:37:16.389+00:00
     lte?: string; // до - дата в виде строки new Date().toISOString() 2023-09-19T10:37:16.389+00:00
@@ -620,6 +624,7 @@ type Params = {
   name: string;
   desc?: string;
   amount: number;
+  date: string; // дата в виде строки new Date().toISOString() 2023-09-19T10:37:16.389+00:00
   type: 'Profit' | 'Cost';
   categoryId: string;
 };
@@ -642,6 +647,7 @@ type Params = {
   name: string;
   desc?: string;
   amount: number;
+  date: string; // дата в виде строки new Date().toISOString() 2023-09-19T10:37:16.389+00:00
   type: 'Profit' | 'Cost';
   categoryId: string;
 };
@@ -659,6 +665,7 @@ type Params = {
   name?: string;
   desc?: string;
   amount?: number;
+  date?: string; // дата в виде строки new Date().toISOString() 2023-09-19T10:37:16.389+00:00
   type?: 'Profit' | 'Cost';
   categoryId?: string;
 };

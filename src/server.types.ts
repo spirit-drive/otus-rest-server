@@ -115,6 +115,7 @@ export type OperationGetManyInput = Pick<Operation, 'name' | 'type'> & {
   type?: 'Cost' | 'Profit';
   createdAt?: DateRange;
   updatedAt?: DateRange;
+  date?: DateRange;
 };
 
 export type ProductInput = {
@@ -159,6 +160,7 @@ export type Cost = {
   id: string;
   name: string;
   desc?: string;
+  date: Date;
   createdAt: Date;
   updatedAt: Date;
   amount: number;
@@ -170,6 +172,7 @@ export type Profit = {
   id: string;
   name: string;
   desc?: string;
+  date: Date;
   createdAt: Date;
   updatedAt: Date;
   amount: number;

@@ -32,6 +32,7 @@ export type ResponseManyResult<T> = {
 
 export type AuthResult = {
   token: string;
+  profile: Profile;
 };
 
 export type SignUpBody = {

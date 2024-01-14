@@ -34,5 +34,5 @@ export const signup: RequestHandler<never, AuthResult | ServerErrors, SignUpBody
   }
 
   const token = sign({ id: user._id });
-  res.send({ token });
+  res.send({ token, profile: user });
 };

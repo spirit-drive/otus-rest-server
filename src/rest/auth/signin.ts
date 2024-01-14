@@ -17,5 +17,5 @@ export const signin: RequestHandler<never, AuthResult | ServerErrors, SignInBody
   }
 
   const token = sign({ id: user._id });
-  res.send({ token });
+  res.send({ token, profile: user });
 };

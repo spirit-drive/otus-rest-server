@@ -11,6 +11,7 @@ export enum SortField {
   id = 'id',
   createdAt = 'createdAt',
   updatedAt = 'updatedAt',
+  date = 'date',
   name = 'name',
 }
 

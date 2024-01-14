@@ -22,6 +22,9 @@ export const setSortingAndPagination = (
       case SortField.createdAt:
         sortField = 'createdAt';
         break;
+      case SortField.date:
+        sortField = 'date';
+        break;
       case SortField.updatedAt:
         sortField = 'updatedAt';
         break;

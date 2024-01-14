@@ -229,7 +229,7 @@ type Filters = {
   }
   sorting?: {
     type: 'ASC' | 'DESC';
-    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name' | 'date';
   };
 };
 ```
@@ -337,7 +337,7 @@ type Filters = {
   }
   sorting?: {
     type: 'ASC' | 'DESC';
-    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name' | 'date';
   };
 };
 ```
@@ -459,7 +459,7 @@ type Filters = {
   }
   sorting?: {
     type: 'ASC' | 'DESC';
-    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name' | 'date';
   };
 };
 ```
@@ -576,7 +576,7 @@ type Filters = {
   }
   sorting?: {
     type: 'ASC' | 'DESC';
-    field: 'id' | 'createdAt' | 'updatedAt' | 'name';
+    field: 'id' | 'createdAt' | 'updatedAt' | 'name' | 'date';
   };
 };
 ```
@@ -685,7 +685,7 @@ type Params = {
 }
 ```
 
-###### Пример выгрузки изображения на сервер с помощью fetch
+###### Пример загрузки изображения на сервер с помощью fetch
 ```tsx
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const [file] = e.target.files;
@@ -711,7 +711,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 <input type="file" onChange={handleChange} />
 ```
 
-###### Пример выгрузки изображения на сервер с помощью XMLHttpRequest
+###### Пример загрузки изображения на сервер с помощью XMLHttpRequest
 ```tsx
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const [file] = e.target.files;

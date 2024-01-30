@@ -323,6 +323,7 @@ type Params = {
 type Filters = {
   name?: string;
   ids?: string[];
+  categoryIds?: string[];
   pagination?: {
     pageSize?: number;
     pageNumber?: number;
@@ -557,6 +558,7 @@ type Params = {
 type Filters = {
   ids?: string[];
   name?: string;
+  categoryIds?: string[];
   type?: 'Cost' | 'Profit';
   pagination?: {
     pageSize?: number;

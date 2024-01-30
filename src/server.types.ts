@@ -100,6 +100,7 @@ export type ProductGetManyInput = Pick<Product, 'name'> & {
   sorting?: Sorting;
   createdAt?: DateRange;
   updatedAt?: DateRange;
+  categoryIds?: string[];
 };
 
 export type OperationAddInput = Omit<Operation, 'id' | 'createdAt' | 'category' | 'updatedAt'> & {
@@ -112,6 +113,7 @@ export type OperationUpdateInput = Omit<Operation, 'id' | 'createdAt' | 'categor
 
 export type OperationGetManyInput = Pick<Operation, 'name' | 'type'> & {
   ids?: string[];
+  categoryIds?: string[];
   pagination?: Pagination;
   sorting?: Sorting;
   type?: 'Cost' | 'Profit';

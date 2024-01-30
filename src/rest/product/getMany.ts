@@ -20,7 +20,7 @@ export const getMany: RequestHandler<never, ResponseManyResult<Product[]> | Serv
     } catch (e) {
       return res.status(400).json(new InvalidQueryParamsError(e));
     }
-    const { name, ids, sorting, pagination, createdAt, updatedAt } = params;
+    const { name, ids, sorting, pagination, createdAt, updatedAt, categoryIds } = params;
     const query = ProductModel.find();
     if (commandId) {
       query.where('commandId', commandId);
@@ -45,6 +45,9 @@ export const getMany: RequestHandler<never, ResponseManyResult<Product[]> | Serv
     }
     if (ids?.length) {
       query.where('_id', { $in: ids });
+    }
+    if (categoryIds?.length) {
+      query.where('categoryId', { $in: categoryIds });
     }
     if (name) {
       query.where('name', new RegExp(name, 'i'));

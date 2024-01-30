@@ -2,7 +2,7 @@ import { RequestHandler } from 'express-serve-static-core';
 import { verify } from '../utils/jwt';
 import { UserDocument, UserModel } from '../models/User';
 import { getToken } from '../utils/authentication';
-import { AuthError, NotFoundError } from '../Errors';
+import { AuthError } from '../Errors';
 
 export const authentication: RequestHandler = async (req, res, next) => {
   if (!req.user) return res.status(401).json(new AuthError(`token is required`));
@@ -20,6 +20,6 @@ export const setUser: RequestHandler = async (req, res, next) => {
     req.user = (await UserModel.findById(userId)) as UserDocument;
     next();
   } catch (e) {
-    res.status(403).json(new NotFoundError(`user not found`));
+    res.status(401).json(new AuthError(`user not found`));
   }
 };

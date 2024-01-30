@@ -21,7 +21,7 @@ export const getMany: RequestHandler<
     } catch (e) {
       return res.status(400).json(new InvalidQueryParamsError(e));
     }
-    const { name, ids, pagination, sorting, type, createdAt, date, updatedAt } = params;
+    const { name, categoryIds, ids, pagination, sorting, type, createdAt, date, updatedAt } = params;
 
     const query = OperationModel.find();
     if (commandId) {
@@ -59,6 +59,9 @@ export const getMany: RequestHandler<
     }
     if (ids?.length) {
       query.where('_id', { $in: ids });
+    }
+    if (categoryIds?.length) {
+      query.where('categoryId', { $in: categoryIds });
     }
     if (name) {
       query.where('name', new RegExp(name, 'i'));

@@ -29,8 +29,11 @@ export const update: (patch?: boolean) => RequestHandler<StandardParams, Order |
         return res.status(400).json(new NotFoundError(`not all products found`, 'products'));
       }
 
-      const entity = await OrderModel.findOne({ _id: id, commandId });
+      const entity = await OrderModel.findById(id);
       if (!entity) return res.status(404).json(new NotFoundError(`Order with id: "${id}" not found`));
+      if (entity.commandId !== commandId) {
+        return res.status(403).json(new NotAllowedError(`You can't edit this Order`));
+      }
       if (entity.userId !== userId) {
         return res.status(403).json(new NotAllowedError(`The order can only be edited by the creator`));
       }

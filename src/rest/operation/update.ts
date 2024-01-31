@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { OperationModel } from '../../models/Operation';
 import { prepareOperation } from './prepareOperation';
-import { InternalServerError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
+import { InternalServerError, ValidationError, ServerErrors, NotFoundError, NotAllowedError } from '../../Errors';
 import { Operation, OperationUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 import { CategoryModel } from '../../models/Category';
@@ -14,8 +14,11 @@ export const update: (
     try {
       const { id } = req.params;
       const { commandId } = (req.user || {}) as UserDocument;
-      const entity = await OperationModel.findOne({ _id: id, commandId });
+      const entity = await OperationModel.findById(id);
       if (!entity) return res.status(404).json(new NotFoundError(`Operation with id: "${id}" not found`));
+      if (entity.commandId !== commandId) {
+        return res.status(403).json(new NotAllowedError(`You can't edit this Operation`));
+      }
       updateModel(req.body, entity, ['name', 'type', 'categoryId', 'date', 'desc', 'amount'], patch);
       if (!(await CategoryModel.findById(entity.categoryId))) {
         return res.status(400).json(new NotFoundError(`category not found`, 'categoryId'));

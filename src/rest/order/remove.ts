@@ -9,9 +9,13 @@ export const remove: RequestHandler<StandardParams, Order | ServerErrors> = asyn
   try {
     const { id } = req.params;
     const { commandId, id: userId } = (req.user || {}) as UserDocument;
-    const entity = await OrderModel.findOneAndRemove({ _id: id, commandId });
-
+    const entity = await OrderModel.findById(id);
     if (!entity) return res.status(404).json(new NotFoundError(`Order with id: "${id}" not found`));
+    if (entity.commandId !== commandId) {
+      return res.status(403).json(new NotAllowedError(`You can't remove this Order`));
+    }
+    await entity.deleteOne();
+
     if (entity.userId !== userId) {
       return res.status(403).json(new NotAllowedError(`The order can only be edited by the creator`));
     }

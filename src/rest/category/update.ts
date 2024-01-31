@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { CategoryModel } from '../../models/Category';
 import { prepareCategory } from './prepareCategory';
-import { InternalServerError, ValidationError, ServerErrors, NotFoundError } from '../../Errors';
+import { InternalServerError, ValidationError, ServerErrors, NotFoundError, NotAllowedError } from '../../Errors';
 import { Category, CategoryUpdateInput, StandardParams } from '../../server.types';
 import { updateModel } from '../helpers';
 import { UserDocument } from '../../models/User';
@@ -13,8 +13,11 @@ export const update: (
     try {
       const { id } = req.params;
       const { commandId } = (req.user || {}) as UserDocument;
-      const entity = await CategoryModel.findOne({ _id: id, commandId });
+      const entity = await CategoryModel.findById(id);
       if (!entity) return res.status(404).json(new NotFoundError(`Category with id: "${id}" not found`));
+      if (entity.commandId !== commandId) {
+        return res.status(403).json(new NotAllowedError(`You can't edit this Category`));
+      }
       updateModel(req.body, entity, ['name', 'photo'], patch);
 
       // Выполняем валидацию перед сохранением

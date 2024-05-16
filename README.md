@@ -18,6 +18,7 @@ type Category = {
   photo?: string;
   createdAt: Date;
   updatedAt: Date;
+  commandId: string;
 };
 ```
 #### Order
@@ -30,6 +31,7 @@ type Order = {
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
+  commandId: string;
 };
 
 type OrderProduct = {
@@ -60,6 +62,7 @@ type Cost = {
   updatedAt: Date;
   amount: number;
   category: Category;
+  commandId: string;
   type: 'Cost';
 };
 
@@ -71,6 +74,7 @@ type Profit = {
   updatedAt: Date;
   amount: number;
   category: Category;
+  commandId: string;
   type: 'Profit';
 };
 
@@ -87,6 +91,7 @@ type Product = {
   updatedAt: Date;
   oldPrice?: number;
   price: number;
+  commandId: string;
   category: Category;
 };
 ```
@@ -166,6 +171,7 @@ export type Profile = {
   name: string;
   email: string;
   signUpDate: Date;
+  commandId: string;
 };
 ```
 ##### /profile POST | PUT | PATCH **PROTECTED**
@@ -185,6 +191,7 @@ export type Profile = {
   name: string;
   email: string;
   signUpDate: Date;
+  commandId: string;
 };
 ```
 ##### /profile/change-password POST **PROTECTED**

@@ -15,6 +15,7 @@ export const prepareProduct = async (item: ProductDocument): Promise<Product> =>
     oldPrice: item.oldPrice,
     price: item.price,
     updatedAt: item.updatedAt,
+    commandId: item.commandId,
     category: await prepareCategory(category),
   };
 };

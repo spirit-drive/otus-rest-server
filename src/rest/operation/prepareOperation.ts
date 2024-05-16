@@ -15,6 +15,7 @@ export const prepareOperation = async (item: OperationDocument): Promise<Operati
     updatedAt: item.updatedAt,
     type: item.type,
     amount: item.amount,
+    commandId: item.commandId,
     category: await prepareCategory(category),
   };
 };

@@ -6,5 +6,6 @@ export const prepareUser = (item: UserDocument): User =>
     ? {
         id: item._id.toString(),
         name: item.name,
+        commandId: item.commandId,
       }
     : null;

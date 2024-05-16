@@ -26,6 +26,7 @@ export const prepareOrder = async (item: OrderDocument): Promise<Order> => {
     status: item.status,
     user: prepareUser(userDoc),
     createdAt: item.createdAt,
+    commandId: item.commandId,
     updatedAt: item.updatedAt,
   };
 };

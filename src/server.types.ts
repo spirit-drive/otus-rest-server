@@ -64,6 +64,7 @@ export type Profile = {
   name: string;
   email: string;
   signUpDate: unknown;
+  commandId: string;
 };
 
 export type User = Omit<Profile, 'email' | 'signUpDate'>;
@@ -72,6 +73,7 @@ export type Category = {
   id: string;
   name: string;
   photo?: string;
+  commandId: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -157,6 +159,7 @@ export type Product = {
   updatedAt: Date;
   oldPrice?: number;
   price: number;
+  commandId: string;
   category: Category;
 };
 
@@ -169,6 +172,7 @@ export type Cost = {
   updatedAt: Date;
   amount: number;
   category: Category;
+  commandId: string;
   type: 'Cost';
 };
 
@@ -181,6 +185,7 @@ export type Profit = {
   updatedAt: Date;
   amount: number;
   category: Category;
+  commandId: string;
   type: 'Profit';
 };
 
@@ -210,6 +215,7 @@ export type Order = {
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
+  commandId: string;
 };
 
 export type DateRange = {

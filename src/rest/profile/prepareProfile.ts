@@ -8,5 +8,6 @@ export const prepareProfile = (item: UserDocument): Profile =>
         name: item.name,
         email: item.email,
         signUpDate: item.signUpDate,
+        commandId: item.commandId,
       }
     : ({} as Profile);

@@ -22,7 +22,7 @@ export const update: (patch?: boolean) => RequestHandler<StandardParams, Order |
     try {
       const { id } = req.params;
       const { commandId, id: userId } = (req.user || {}) as UserDocument;
-      if (req.body.products.some((i) => !ObjectId.isValid(i.id))) {
+      if (req.body.products?.some((i) => !ObjectId.isValid(i.id))) {
         return res.status(400).json(new NotValidIdError(`not all product ids are valid`, 'products'));
       }
       if (req.body.products && !(await isExistProducts(req.body.products.map((i) => i.id)))) {
